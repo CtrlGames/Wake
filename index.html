@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Demo</title>
+  <link rel="stylesheet" href="dist/base.css">
+  <style type="riot"></style>
+</head>
+<body>
+  <wake />
+  <script src="./node_modules/riot/riot.min.js"></script>
+  <script src="./node_modules/systemjs/dist/system.js"></script>
+  <script src="dist/tags.js"></script>
+  <script>
+    System.config({ "baseURL": "/dist/js" });
+    System.import("demo.js");
+  </script>
+</body>
+</html>

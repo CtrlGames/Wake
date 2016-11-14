@@ -1,0 +1,65 @@
+{
+  "name": "riotseed",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:tags": "riot tags/ dist/tags.js --type babel",
+    "build:tags:watch": "npm run build:tags -- -w",
+    "build:js": "babel js -d dist/js/",
+    "build:js:watch": "npm run build:js -- -w",
+    "build:sass": "node-sass sass/base.sass dist/base.css",
+    "build:sass:watch": "node-sass sass/base.sass dist/base.css --watch",
+    "build": "npm run build:js & npm run build:tags",
+    "build:watch": "npm run build:js:watch & npm run build:tags:watch & npm run build:sass:watch",
+    "lint": "eslint tags/*.tag js || true"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.18.0",
+    "babel-preset-es2015-riot": "^1.1.0",
+    "eslint": "^3.9.0",
+    "eslint-plugin-riot": "^0.1.6",
+    "node-sass": "^3.11.2",
+    "riot": "^2.6.4",
+    "systemjs": "^0.19.40"
+  },
+  "babel": {
+    "presets": [
+      "es2015-riot"
+    ]
+  },
+  "eslintConfig": {
+    "plugins": [
+      "riot"
+    ],
+    "env": {
+      "browser": true,
+      "commonjs": true,
+      "es6": true
+    },
+    "globals": {
+      "riot": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "sourceType": "module"
+    },
+    "rules": {
+      "indent": [
+        "error",
+        2
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "semi": [
+        "error",
+        "always"
+      ]
+    }
+  }
+}
