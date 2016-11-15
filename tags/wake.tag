@@ -50,10 +50,10 @@
           content: "Hint: "
 
     game-log
-      width: 250px
+      width: 300px
 
     increment-pools
-      width: 175px
+      width: 250px
 
     tabs
       flex: 1 1 auto

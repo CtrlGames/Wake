@@ -4,11 +4,16 @@
     <button name=inputButton class=gameLog__inputButton>+</button>
   </div>
   <div class=gameLog__log>
-    <div class=gameLog__logEntry each={ logEntries }>{ value }</div>
+    <div class=gameLog__logEntry each={ logEntries }>
+      <div class="command" if={ command }>> { command } </div>
+      <div class="output">{ output }</div>
+    </div>
   </div>
   <!-- check comment -->
 
   <style type=sass>
+    @import "sass/vars";
+
     game-log
       display: block
 
@@ -25,7 +30,7 @@
       &__inputButton
         background: none
         border: none
-        border-left: solid 2px #000
+        border-left: solid 2px $shade1
         border-radius: 0
         flex: 0 0 auto
         padding: 0
@@ -33,16 +38,21 @@
         width: 20px
 
       &__logEntry
-        margin-top: 5px
+        margin-top: $gutter*1.5
+
+        .command
+          font-size: 0.6em
+          font-weight: bold
+          color: $shade3
   </style>
 
   <script type="babel">
     // will store the log here
     this.logEntries = [
-      {value: "Item one"},
-      {value: "Item two"},
-      {value: "Item three"},
-      {value: "Item four"}
+      {command: "Dolor est it", output: "Lorem ipsum dolor est it. Lorem ipsum dolor est it. Lorem ipsum dolor est it. Lorem ipsum dolor est it."},
+      {command: "Dolor est it", output: "Lorem ipsum dolor est it. Lorem ipsum dolor est it. Lorem ipsum dolor est it. Lorem ipsum dolor est it."},
+      {command: "Dolor est it", output: "Lorem ipsum dolor est it. Lorem ipsum dolor est it. Lorem ipsum dolor est it. Lorem ipsum dolor est it."},
+      {output: "You wake with the waves calm against your face."}
     ];
   </script>
 </game-log>

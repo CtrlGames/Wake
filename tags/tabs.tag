@@ -14,6 +14,7 @@
     tabs
       position: relative
       padding-left: $gutter
+      margin-left: $gutter*2
       border-left: solid 2px #000
 
     .tabs
