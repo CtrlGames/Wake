@@ -1,9 +1,29 @@
 // corners of bordered elements
-$radius: 5px;
+$shade1: #000
+$shade2: #9f9f9f
+$shade3: #666
+$shade4: #EAEAEA
+$shade5: #fff
+
+$shadow: 0px 2px 3px rgba($shade1, .4)
+$shadow2: 0px -2px 3px rgba($shade1, .4)
+$radius: 2px
 $gutter: 10px
 
-$shade1: #000
-$shade2: #333
-$shade3: #666
-$shade4: #eee
-$shade5: #fff
+$animationDuration: .40s
+
+// mixins
+
+=button-base
+  display: inline-block
+  background: $shade4
+  border-radius: $radius
+  border: none
+  box-shadow: $shadow
+  overflow: hidden
+  padding: 5px 10px
+
+=scrollbar-style
+  position: relative
+  margin-right: -18px
+  padding-right: 18px

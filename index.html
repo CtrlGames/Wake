@@ -4,16 +4,18 @@
   <meta charset="UTF-8">
   <title>Demo</title>
   <link rel="stylesheet" href="dist/base.css">
+  <link rel="stylesheet" href="./node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.min.css">
   <style type="riot"></style>
 </head>
 <body>
   <wake />
   <script src="./node_modules/riot/riot.min.js"></script>
   <script src="./node_modules/systemjs/dist/system.js"></script>
+  <script src="./node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.min.js"></script>
   <script src="dist/tags.js"></script>
   <script>
     System.config({ "baseURL": "/dist/js" });
-    System.import("demo.js");
+    System.import("index.js");
   </script>
 </body>
 </html>

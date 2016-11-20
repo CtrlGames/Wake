@@ -10,7 +10,7 @@
     "build:js:watch": "npm run build:js -- -w",
     "build:sass": "node-sass sass/base.sass dist/base.css",
     "build:sass:watch": "node-sass sass/base.sass dist/base.css --watch",
-    "build": "npm run build:js & npm run build:tags",
+    "build": "npm run build:js & npm run build:tags & npm run build:sass",
     "build:watch": "npm run build:js:watch & npm run build:tags:watch & npm run build:sass:watch",
     "lint": "eslint tags/*.tag js || true"
   },
@@ -23,6 +23,7 @@
     "eslint": "^3.9.0",
     "eslint-plugin-riot": "^0.1.6",
     "node-sass": "^3.11.2",
+    "perfect-scrollbar": "^0.6.14",
     "riot": "^2.6.4",
     "systemjs": "^0.19.40"
   },

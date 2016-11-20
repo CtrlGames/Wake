@@ -1,33 +1,27 @@
 <wake>
-  <header class="wake__gameHead">
-    <h1>Your location</h1>
-    <small class="wake__hint">A little hint about something.</small>
-  </header>
+  <wake-header class=card />
   <div class="wake__gameBoard">
-    <game-log />
+    <game-log class=card />
     <div class="wake__gameControls">
-      <location-actions />
+      <location-actions class=card />
       <div class="wake__generalControls">
-        <increment-pools />
-        <tabs />
+        <increment-pools class=card />
+        <tabs class=card />
       </div>
     </div>
   </div>
 
   <style type=sass>
-    @import 'sass/vars'
+    @import 'sass/vars';
 
     wake
       display: flex
-      flex: 1 1 auto
       flex-direction: column
-      padding: $gutter
+      flex: 1 1 auto
+      padding: 5px
+      width: 100%
 
     .wake
-
-      &__gameHead
-        h1
-          display: inline-block
 
       &__gameBoard
         display: flex
@@ -37,20 +31,15 @@
         display: flex
         flex: 1 1 auto
         flex-direction: column
-        padding-left: $gutter
 
       &__generalControls
         display: flex
         flex: 1 1 auto
-        padding-top: $gutter
 
-      &__hint
-        font-style: italic
-        &::before
-          content: "Hint: "
 
     game-log
-      width: 300px
+      flex: 0 0 auto
+      width: 250px
 
     increment-pools
       width: 250px
@@ -58,13 +47,9 @@
     tabs
       flex: 1 1 auto
 
+    location-actions
+      min-height: 38px
+
   </style>
 
-  <script type="babel">
-    var a = 111;
-    var b = 222;
-    if(a){
-
-    }
-  </script>
 </wake>

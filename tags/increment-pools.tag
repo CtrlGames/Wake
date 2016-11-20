@@ -8,8 +8,6 @@
     @import "sass/vars";
 
     increment-pools
-      border-left: solid 2px #000
-      padding-left: $gutter
 
   </style>
 
