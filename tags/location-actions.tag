@@ -1,8 +1,11 @@
 <location-actions>
   <virtual each={ action, index in actions }>
-    <btn class="animated fadeIn" each={[action]} 
-      style={"animation-delay: " + .05*parent.index + "s"}>
-      { text }
+    <btn 
+      class="animated fadeIn"
+      style={"animation-delay: " + .05*index + "s"}
+      click={ parent.updateTba.bind(this, action.text) }
+    >
+      { action.text }
     </btn>
   </virtual>
 
@@ -23,6 +26,10 @@
 
   <script type="babel">
     this.mixin('tba');
+
+    this.updateTba = function(text){
+      this.tba.input(text);
+    };
 
     Object.defineProperty(this, 'actions', {
       get: () => this.tba.currentRoom.actions.filter(e => e.locationButton)

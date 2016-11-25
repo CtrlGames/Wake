@@ -1,5 +1,5 @@
 <btn>
-  <button onclick={ do }><yield /></button>
+  <button onclick={ click }><yield /></button>
 
   <style type=sass>
     @import 'sass/vars';
@@ -15,10 +15,6 @@
   </style>
 
   <script type="babel">
-    this.mixin('tba');
-
-    this.do = function(){
-      this.tba.input(this.text);
-    }
+    this.click = this.opts.click;
   </script>
 </btn>

@@ -1,32 +1,32 @@
 <game-controls>
-  <div class="controls__locationControls">
-    <btn each={ actions }>{ text }</btn>
-  </div>
-  <div class="controls__incrementBase">
-    <ul>
-      <li riot-tag="increment-pool" each={ incPoolsOne }></li>
-    </ul>
-  </div>
+  <tabs class=card>
+    <yield to=tabs>
+      <a class=selected for=tools>Tools</a>
+      <a for=buildings>Buildings</a>
+    </yield>
+    <yield to=content>
+      <div class=selected name=tools>
+        <h1>tools</h1>
+      </div>
+      <div name=buildings>
+        <h1>buildings</h1>
+      </div>
+    </yield>
+  </tabs>
 
   <style type=sass>
     game-controls
       display: block
+      position: relative
+
+      tabs
+        position: absolute
+        top: 0
+        right: 0
+        left: 0
+        bottom: 0
   </style>
 
   <script type="babel">
-
-    // location specific actions place holder
-    this.actions = [
-      {text: "Get stuff"},
-      {text: "Get things"},
-      {text: "do stuff"},
-      {text: "do things"}
-    ];
-    // place holder for incremental pools
-    this.incPoolsOne = [
-      {name: "wood", value: 10},
-      {name: "seed", value: 5},
-      {name: "food", value: 15}
-    ]
   </script>
 </game-controls>

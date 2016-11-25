@@ -1,11 +1,9 @@
 <tabs>
-  <div class=tabs__tabs>
-    <a class="tabs__tab">Demo</a>
-    <a class="tabs__tab selected">Demo</a>
+  <div name=tabs class=tabs__tabs onclick={ selectTab }>
+    <yield from=tabs />
   </div>
-  <div class=tabs__tabContent>
-    I can show you the worrrrrrrrllllld.<br />
-    Tab by tab. 
+  <div name=tabContent class="tabs__tabContent animated fadeIn">
+    <yield from=content />
   </div>
 
   <style type=sass>
@@ -25,37 +23,72 @@
         transform-origin: 100% 100%
         right: 100%
 
-      &__tab
-        position: relative
-        display: inline-block
-        padding: .5em 1.5em 0 1.5em
-        color: inherit
-        cursor: pointer
-        text-decoration: none
-        font-size: .75em
-        margin-right: -8px
+        a
+          position: relative
+          display: inline-block
+          padding: .5em 1.5em 0 1.5em
+          color: inherit
+          cursor: pointer
+          text-decoration: none
+          font-size: .75em
+          margin-right: -8px
 
-        &:before
-          content: '' /* To generate the box */
-          position: absolute
-          top: 0
-          right: 0
-          bottom: 0 
-          left: 0
-          z-index: -1
-          border-radius: 5px 5px 0 0
-          background: #ddd
-          box-shadow: $shadow2
-          transform: perspective(5px) rotateX(3deg)
-          transform-origin: bottom 
-
-        &.selected
-          z-index: 1
-        
           &:before
-            bottom: -1px
-            background: #fff
+            content: ''
+            position: absolute
+            top: 0
+            right: 0
+            bottom: 0 
+            left: 0
+            z-index: -1
+            border-radius: 5px 5px 0 0
+            background: #ddd
+            box-shadow: $shadow2
+            transform: perspective(5px) rotateX(3deg)
+            transform-origin: bottom 
+            transition: background $animationDuration
 
+          &.selected
+            z-index: 1
+          
+            &:before
+              bottom: -1px
+              background: #fff
+
+      &__tabContent
+
+        & > div
+          animation-duration: $animationDuration
+          display: none
+
+          &.selected
+            display: block
+          
   </style>
+
+  <script type=babel>
+    this.selectTab = function(e){
+      this.deselectAll(() => {
+        this[e.target.getAttribute('for')].classList.add('selected');
+      });
+      e.target.classList.add('selected');
+    }
+
+    this.deselectAll = function(callback) {
+      this.tabContent.callback = callback;
+      this.tabs.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'));
+      this.tabContent.classList.remove('fadeIn');
+      this.tabContent.classList.add('fadeOut');
+    }
+
+    this.tabContent.addEventListener("animationend", () => { 
+      if (this.tabContent.classList.contains('fadeOut')) {
+        this.tabContent.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'));
+        if(this.tabContent.callback) this.tabContent.callback();
+        this.tabContent.classList.remove('fadeOut');
+        this.tabContent.classList.add('fadeIn');
+      }
+    });
+  </script>
   
 </tabs>
