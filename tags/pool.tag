@@ -1,5 +1,7 @@
 <pool>
-  <label>{name}</lablel>:<span>{value}</span>
+  <div>
+    <label>{name}</lablel>:<span>{value}</span>
+  </div>
 
   <script type="babel">
   </script>

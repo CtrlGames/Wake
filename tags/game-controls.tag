@@ -1,11 +1,11 @@
 <game-controls>
   <tabs class=card>
     <yield to=tabs>
-      <a class=selected for=tools>Tools</a>
+      <a for=tools>Tools</a>
       <a for=buildings>Buildings</a>
     </yield>
     <yield to=content>
-      <div class=selected name=tools>
+      <div name=tools>
         <h1>tools</h1>
       </div>
       <div name=buildings>

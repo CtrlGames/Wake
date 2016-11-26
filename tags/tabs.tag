@@ -2,7 +2,7 @@
   <div name=tabs class=tabs__tabs onclick={ selectTab }>
     <yield from=tabs />
   </div>
-  <div name=tabContent class="tabs__tabContent animated fadeIn">
+  <div name=tabContent class="tabs__tabContent animated fadeInUp">
     <yield from=content />
   </div>
 
@@ -15,52 +15,61 @@
     .tabs
 
       &__tabs
+        display: flex
+        flex-direction: row-reverse
         position: absolute
-        z-index: 1
-        white-space: nowrap
-        top: 0
-        transform: rotateZ(-90deg)
-        transform-origin: 100% 100%
         right: 100%
+        top: 0
+        transform-origin: 100% 100%
+        transform: rotateZ(-90deg)
+        user-select: none
+        white-space: nowrap
+        z-index: 1
 
         a
-          position: relative
-          display: inline-block
-          padding: .5em 1.5em 0 1.5em
           color: inherit
           cursor: pointer
-          text-decoration: none
+          display: inline-block
           font-size: .75em
           margin-right: -8px
+          padding: .5em 1.5em 0 1.5em
+          position: relative
+          text-decoration: none
 
           &:before
-            content: ''
-            position: absolute
-            top: 0
-            right: 0
-            bottom: 0 
-            left: 0
-            z-index: -1
-            border-radius: 5px 5px 0 0
             background: #ddd
+            border-radius: 5px 5px 0 0
+            bottom: 0 
             box-shadow: $shadow2
-            transform: perspective(5px) rotateX(3deg)
+            content: ''
+            left: 0
+            position: absolute
+            right: 0
+            top: 0
             transform-origin: bottom 
+            transform: perspective(5px) rotateX(3deg)
             transition: background $animationDuration
+            z-index: -1
 
           &.selected
             z-index: 1
           
             &:before
-              bottom: -1px
               background: #fff
+              bottom: -1px
+
+          &:only-child
+            display: none
+
 
       &__tabContent
+        overflow: hidden
 
         & > div
           animation-duration: $animationDuration
           display: none
 
+          &:only-child,
           &.selected
             display: block
           
@@ -68,6 +77,7 @@
 
   <script type=babel>
     this.selectTab = function(e){
+      if(!e.target.getAttribute('for') || e.target.classList.contains('selected')) return
       this.deselectAll(() => {
         this[e.target.getAttribute('for')].classList.add('selected');
       });
@@ -77,16 +87,25 @@
     this.deselectAll = function(callback) {
       this.tabContent.callback = callback;
       this.tabs.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'));
-      this.tabContent.classList.remove('fadeIn');
-      this.tabContent.classList.add('fadeOut');
+      this.tabContent.classList.add('fadeOutDown');
     }
 
     this.tabContent.addEventListener("animationend", () => { 
-      if (this.tabContent.classList.contains('fadeOut')) {
+      if (this.tabContent.classList.contains('fadeOutDown')) {
         this.tabContent.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'));
         if(this.tabContent.callback) this.tabContent.callback();
-        this.tabContent.classList.remove('fadeOut');
-        this.tabContent.classList.add('fadeIn');
+        this.tabContent.classList.remove('fadeOutDown');
+      }
+    });
+
+    this.noneSelected = function(){
+      return (!this.tabs.querySelectorAll('.selected').length);
+    }
+
+    this.on('mount', () => {
+      if(this.noneSelected()){
+        this.tabs.querySelector('a').classList.add('selected');
+        this.tabContent.querySelector('div').classList.add('selected');
       }
     });
   </script>

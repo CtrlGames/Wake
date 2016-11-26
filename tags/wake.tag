@@ -5,7 +5,7 @@
     <div class="wake__gameControls">
       <location-actions class=card />
       <div class="wake__generalControls">
-        <increment-pools class=card />
+        <increment-pools />
         <game-controls />
       </div>
     </div>
@@ -39,7 +39,7 @@
 
     game-log
       flex: 0 0 auto
-      width: 250px
+      width: 300px
 
     increment-pools
       width: 250px
