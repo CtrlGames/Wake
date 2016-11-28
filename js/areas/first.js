@@ -94,7 +94,16 @@ const forest = tba.addRoom({
   key: 'forest',
   name: 'Forest Path',
   description: 'The brush is too thick to continue',
-  actions: []
+  actions: [
+    {
+      command: /clear path/,
+      locationButton: true,
+      text: 'Clear Path',
+      method: function() {
+        return 'No... I will not clear the path.';
+      }
+    }
+  ]
 });
 
 downBeach.addExit({
@@ -106,13 +115,36 @@ downBeach.addExit({
 
 downBeach.addExit({
   key: 'forest',
-  accessor: /forest|inland/, 
+  accessor: /forest|inland/,
   room: forest,
+  description: 'you can go inland.'
 });
 
 upBeach.addExit({
   key: 'down beach',
   accessor: /down.*beach|down/,
   room: downBeach,
-  description: 'You can go down the beach'
+  description: 'You can go down the beach.'
+});
+
+upBeach.addExit({
+  key: 'forest',
+  accessor: /forest|inland/, 
+  room: forest,
+  description: 'you can go inland.'
+});
+
+
+forest.addExit({
+  key: 'down beach',
+  accessor: /down.*beach|down/,
+  room: downBeach,
+  description: 'You can go down the beach.'
+});
+
+forest.addExit({
+  key: 'up beach',
+  accessor: /up.*beach|up/,
+  room: upBeach,
+  description: 'You can go up the beach.'
 });
