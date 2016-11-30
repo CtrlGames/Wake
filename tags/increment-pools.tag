@@ -31,6 +31,16 @@
 
   <script type="babel">
     // place holder for incremental pools
+    
+    this.mixin('inc');
+
+    console.log(this.inc)
+
+    this.inc.queues.island.addPool({name:'Wood', key: 'wood', minimum:0, amount: 2});
+    this.inc.queues.island.addPool({name:'String', key: 'string', minimum:0, amount: 2});
+    this.inc.queues.island.addPool({name:'Food', key: 'food', minimum:0, amount: 5});
+
+    this.queues = this.inc.queues;
     this.queues = [
       {label: 'Islands', pools: [
         {name: "wood", value: 10},
@@ -43,5 +53,7 @@
         {name: "food", value: 15}
       ]}
     ];
+
+
   </script>
 </increment-pools>

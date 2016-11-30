@@ -1,4 +1,7 @@
 import tba from 'TBAInstance.js';
+import * as inc from 'INCInstances.js';
+
+console.log('First', inc);
 
 const downBeach = tba.addRoom({
   key: 'downBeach',
