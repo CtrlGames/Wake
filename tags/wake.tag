@@ -1,12 +1,12 @@
 <wake>
-  <wake-header class=card />
-  <div class="wake__gameBoard">
-    <game-log class=card />
-    <div class="wake__gameControls">
-      <location-actions class=card />
-      <div class="wake__generalControls">
-        <increment-pools />
-        <game-controls />
+  <wake-header if={ ~activeCards.indexOf('wake-header') } class=card dead={ activeCards.length === 1 } />
+  <div class=wake__gameBoard>
+    <game-log class=card if={ ~activeCards.indexOf('game-log') } />
+    <div class=wake__gameControls>
+      <location-actions class=card if={ ~activeCards.indexOf('location-actions') } />
+      <div class=wake__generalControls>
+        <increment-pools class=card if={ ~activeCards.indexOf('increment-pools') } />
+        <game-controls class=card if={ ~activeCards.indexOf('game-controls') } />
       </div>
     </div>
   </div>
@@ -36,13 +36,19 @@
         display: flex
         flex: 1 1 auto
 
-
+      &.active
+        opacity: 1
+    
     game-log
       flex: 0 0 auto
       width: 300px
 
     increment-pools
       width: 250px
+
+      &:only-child
+        width: inherit
+        flex: 1 0 auto
 
     game-controls
       flex: 1 1 auto
@@ -51,5 +57,24 @@
       min-height: 38px
 
   </style>
+
+  <script type=babel>
+    this.mixin('tba');
+    this.mixin('storage');
+    this.activeCards = this.storage.get('activeCards')? JSON.parse(this.storage.get('activeCards')):['wake-header'];
+
+    this.tba.on('cardActivate', (card) => {
+      if(!~this.activeCards.findIndex(e => e===card)) {
+        this.activeCards.push(card);
+        this.storage.set('activeCards', JSON.stringify(this.activeCards))
+        this.update();
+      }
+    });
+
+    this.tba.on('died', () => {
+      this.activeCards = ['wake-header'];
+      this.update();
+    });
+  </script>
 
 </wake>

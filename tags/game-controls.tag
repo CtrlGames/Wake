@@ -1,5 +1,5 @@
 <game-controls>
-  <tabs class=card>
+  <tabs>
     <yield to=tabs>
       <a for=tools>Tools</a>
       <a for=buildings>Buildings</a>
@@ -25,6 +25,8 @@
         right: 0
         left: 0
         bottom: 0
+        padding: 5px 10px 6px 10px
+
   </style>
 
   <script type="babel">

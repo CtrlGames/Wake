@@ -25,7 +25,9 @@
   </style>
 
   <script type="babel">
+    var prevent = false;
     this.mixin('tba');
+    this.mixin('storage');
 
     this.updateTba = function(text){
       this.tba.input(text);
@@ -35,10 +37,20 @@
       get: () => this.tba.currentRoom.actions.filter(e => e.locationButton)
     })
 
+    this.tba.on('cardActivate', (card) => {
+      if (card === 'location-actions') {
+        prevent = true;
+      }
+    });
+
     this.tba.on('roomChange', () => {
       var btns = this.root.querySelectorAll('btn');
-      btns[0].addEventListener("animationend", () => this.update(), false);
-      btns.forEach(e => e.className = "animated fadeOut");
+      btns[0].addEventListener("animationend", () => { 
+        this.update() 
+      }, false);
+      if(!prevent) btns.forEach(e => e.className = "animated fadeOut");
+      else prevent = false;
     });
+
   </script>
 </location-actions>

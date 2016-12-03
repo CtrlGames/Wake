@@ -86,7 +86,7 @@
 
     this.log = function(logOb) {
       if(typeof logOb === "string") logOb = {output: logOb};
-      this.logEntries.unshift(logOb);
+      if(logOb.output) this.logEntries.unshift(logOb);
       return this.update; // returned so you can manually update the log if need be.
     }
 

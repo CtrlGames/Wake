@@ -1,6 +1,6 @@
 
 <increment-pools>
-  <tabs class=card>
+  <tabs>
     <yield to=tabs>
       <a each={ parent.queues } for={ label }>{ label }</a>
     </yield>
@@ -26,15 +26,12 @@
         right: 0
         left: 0
         bottom: 0
+        padding: 5px 10px 6px 10px
 
   </style>
 
   <script type="babel">
-    // place holder for incremental pools
-    
     this.mixin('inc');
-
-    console.log(this.inc)
 
     this.inc.queues.island.addPool({name:'Wood', key: 'wood', minimum:0, amount: 2});
     this.inc.queues.island.addPool({name:'String', key: 'string', minimum:0, amount: 2});
@@ -43,11 +40,6 @@
     this.queues = this.inc.queues;
     this.queues = [
       {label: 'Islands', pools: [
-        {name: "wood", value: 10},
-        {name: "string", value: 5},
-        {name: "food", value: 15}
-      ]},
-      {label: 'Second', pools: [
         {name: "wood", value: 10},
         {name: "string", value: 5},
         {name: "food", value: 15}

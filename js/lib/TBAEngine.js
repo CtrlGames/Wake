@@ -11,7 +11,7 @@ function TBAEngine(){
   this.inventory = {};
   this.rooms = {};
 
-};
+}
 
 TBAEngine.prototype = {
 
@@ -29,6 +29,7 @@ TBAEngine.prototype = {
 
     // get a list of targets including the game and current room
     var targets = this.findTargets(input, [this,this.currentRoom]);
+    var gotCommand = false;
 
     // call commands on targets
     for (let i = 0, il = targets.length; i < il; i++) {
@@ -42,12 +43,13 @@ TBAEngine.prototype = {
             command: action.command.exec(input)
           };
           ret.push(action.method.call(target));
+          gotCommand = true;
         }
       }
     }
 
     output = ret.filter(function(n){ return !!n; }).join(' ');
-    return output.length? output:this.invalidCommand;
+    return gotCommand? output:this.invalidCommand;
   },
 
   addCondition(condition) {
@@ -71,11 +73,12 @@ TBAEngine.prototype = {
   },
 
   findTarget(input) {
-    return this.findTargets(input)[0]
+    return this.findTargets(input)[0];
   },
 
   enterRoom(room) {
     this.currentRoom = room;
+    if (this.currentRoom.enterInit) this.currentRoom.enterInit.call(this);
     return room.getDescription();
   },
 

@@ -2,7 +2,7 @@
   <div name=tabs class=tabs__tabs onclick={ selectTab }>
     <yield from=tabs />
   </div>
-  <div name=tabContent class="tabs__tabContent animated fadeInUp">
+  <div name=tabContent class="tabs__tabContent animated fadeIn">
     <yield from=content />
   </div>
 
@@ -87,14 +87,14 @@
     this.deselectAll = function(callback) {
       this.tabContent.callback = callback;
       this.tabs.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'));
-      this.tabContent.classList.add('fadeOutDown');
+      this.tabContent.classList.add('fadeOut');
     }
 
     this.tabContent.addEventListener("animationend", () => { 
-      if (this.tabContent.classList.contains('fadeOutDown')) {
+      if (this.tabContent.classList.contains('fadeOut')) {
         this.tabContent.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'));
         if(this.tabContent.callback) this.tabContent.callback();
-        this.tabContent.classList.remove('fadeOutDown');
+        this.tabContent.classList.remove('fadeOut');
       }
     });
 

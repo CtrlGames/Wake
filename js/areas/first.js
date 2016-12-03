@@ -1,7 +1,5 @@
 import tba from 'TBAInstance.js';
-import * as inc from 'INCInstances.js';
-
-console.log('First', inc);
+import * as storage from 'lib/storage.js';
 
 const downBeach = tba.addRoom({
   key: 'downBeach',
@@ -10,6 +8,18 @@ const downBeach = tba.addRoom({
     return 'You\'re on a beach.' ;
   },
   actions: [
+    {
+      command: /help/,
+      method: function(){
+        this.game.trigger('hint', 'there is no help for you', 3000);
+      }
+    },
+    {
+      command: /please/,
+      method: function(){
+        this.game.trigger('hint', 'no, you\'re done, dude.', 3000);
+      }
+    },
     {
       command: /gather dirt/,
       locationButton: true,
@@ -49,13 +59,17 @@ const upBeach = tba.addRoom({
   key: 'upBeach',
   name: 'Up Beach',
   description: 'The beach is clear.',
+  enterInit: function(){
+    if (!~storage.get('activeCards').indexOf('location-actions')) this.trigger('cardActivate', 'location-actions');
+  },
   actions: [
     {
       command: /gather fish/,
       locationButton: true,
       text: 'Gather fish',
       method: function(){
-        return 'you fail to do anything, you suck.';
+        this.game.trigger('cardActivate', 'increment-pools');
+        return 'you get a fish, but have no way to carry it, you suck.';
       }
     },
     {
@@ -63,6 +77,7 @@ const upBeach = tba.addRoom({
       locationButton: true,
       text: 'Gather sticks',
       method: function(){
+        this.game.trigger('cardActivate', 'game-controls');
         return 'you fail to do anything, you suck.';
       }
     },
@@ -97,6 +112,9 @@ const forest = tba.addRoom({
   key: 'forest',
   name: 'Forest Path',
   description: 'The brush is too thick to continue',
+  enterInit: function(){
+    this.trigger('cardActivate', 'location-actions');
+  },
   actions: [
     {
       command: /clear path/,
