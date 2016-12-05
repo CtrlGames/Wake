@@ -1,5 +1,6 @@
 import tba from 'TBAInstance.js';
-import * as storage from 'lib/storage.js';
+import * as storage from 'storage.js';
+import * as inc from 'INCInstances.js';
 
 const downBeach = tba.addRoom({
   key: 'downBeach',
@@ -49,7 +50,9 @@ const downBeach = tba.addRoom({
       locationButton: true,
       text: 'Gather Sticks',
       method: function(){
-        return 'you fail to do anything, you suck.';
+        inc.queues.island.pools.wood.modifyPoolAmount(1);
+        this.game.trigger('poolInc');
+        return 'you pick up a stick, big whoop, wanna fight about it?';
       }
     }
   ]

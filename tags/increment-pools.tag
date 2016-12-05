@@ -2,11 +2,11 @@
 <increment-pools>
   <tabs>
     <yield to=tabs>
-      <a each={ parent.queues } for={ label }>{ label }</a>
+      <a each={ area, queue in parent.inc } for={ area }>{ area }</a>
     </yield>
     <yield to=content>
-      <div each={ parent.queues } name={ label }>
-        <pool each={ pools } />
+      <div each={ area, queue in parent.inc } name={ area }>
+        <pool each={ name, pool in queue.pools } />
       </div>
     </yield>
   </tabs>
@@ -33,18 +33,18 @@
   <script type="babel">
     this.mixin('inc');
 
-    this.inc.queues.island.addPool({name:'Wood', key: 'wood', minimum:0, amount: 2});
-    this.inc.queues.island.addPool({name:'String', key: 'string', minimum:0, amount: 2});
-    this.inc.queues.island.addPool({name:'Food', key: 'food', minimum:0, amount: 5});
+    this.inc.island.addPool({name:'Wood', key: 'wood', minimum:0});
+    this.inc.island.addPool({name:'String', key: 'string', minimum:0});
+    this.inc.island.addPool({name:'Food', key: 'food', minimum:0});
 
-    this.queues = this.inc.queues;
-    this.queues = [
-      {label: 'Islands', pools: [
-        {name: "wood", value: 10},
-        {name: "string", value: 5},
-        {name: "food", value: 15}
-      ]}
-    ];
+    this.inc.on('poolModified', () => this.update());
+    //this.queues = [
+      //{label: 'Islands', pools: [
+        //{name: "wood", value: 10},
+        //{name: "string", value: 5},
+        //{name: "food", value: 15}
+      //]}
+    //];
 
 
   </script>

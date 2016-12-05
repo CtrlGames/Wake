@@ -3,9 +3,14 @@
     <btn click={ wakeUp }>Wake Up</btn>
     <h1 id="locationName" class="animated fadeIn">{ tba.currentRoom.name }</h1>
     <small id="hintElm" class="animated fadeIn" if={ hint.length }>{ hint }</small>
+    <nav class="menu">
+      <a onclick={ reset }>reset</a>
+    </nav>
   </header>
 
   <style type=sass>
+    @import "sass/vars";
+
     wake-header
       h1
         display: inline-block
@@ -23,12 +28,24 @@
         font-style: italic
         &::before
           content: "Hint: "
+
+      .menu
+        float: right;
+        font-size: 10px
+        color: $shade3
+        cursor: pointer
+
+        a
+          padding: 5px 0
+          &:hover
+            color: $shade1
   </style>
 
   <script type=babel>
     var hint = '';
     var hintTimeout;
     this.mixin('tba');
+    this.mixin('storage');
 
     Object.defineProperty(this, 'hint', {
       get(){return hint;},
@@ -68,5 +85,9 @@
       this.locationName.classList.remove("fadeIn");
       this.locationName.classList.add("fadeOut");
     });
+
+    this.reset = function(){
+      this.storage.clear();
+    };
   </script>
 </wake-header>

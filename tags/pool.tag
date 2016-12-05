@@ -1,6 +1,6 @@
 <pool>
   <div>
-    <label>{name}</lablel>:<span>{value}</span>
+    <label>{name}</lablel>: <span>{pool.amount}</span>
   </div>
 
   <script type="babel">
