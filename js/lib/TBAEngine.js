@@ -5,9 +5,9 @@ function TBAEngine(){
   this.actions = [];
   this.conditions = [];
   this.currentRoom = null;
-  this.emptyInventory = "Empy inventory";
-  this.invalidCommand = "Invalid Command";
-  this.invalidExit = "Cannot go there";
+  this.emptyInventory = 'Empy inventory';
+  this.invalidCommand = 'Invalid Command';
+  this.invalidExit = 'Cannot go there';
   this.inventory = {};
   this.rooms = {};
 
@@ -37,7 +37,7 @@ TBAEngine.prototype = {
       if(!target.actions) continue;
       for (let j = 0, jl = target.actions.length; j < jl; j++) {
         let action = target.actions[j];
-        if (action.command.test(input)) {
+        if (action.command && action.command.test(input)) {
           target.regExpMatchs = {
             target: target.accessor? target.accessor.exec(input):null,
             command: action.command.exec(input)
@@ -94,12 +94,12 @@ TBAEngine.prototype = {
 
 };
 
-Object.defineProperty(TBAEngine.prototype, "inventoryList", {
-  get(){return Object.keys(this.inventory)}
+Object.defineProperty(TBAEngine.prototype, 'inventoryList', {
+  get(){return Object.keys(this.inventory);}
 });
 
-Object.defineProperty(TBAEngine.prototype, "roomList", {
-  get(){return Object.keys(this.rooms)}
+Object.defineProperty(TBAEngine.prototype, 'roomList', {
+  get(){return Object.keys(this.rooms);}
 });
 
 // Room construction -------------
@@ -125,7 +125,7 @@ Room.prototype = {
   },
 
   addExit(discriptor) {
-    discriptor.accessor = discriptor.accessor || new RegExp(discriptor.key, "i");
+    discriptor.accessor = discriptor.accessor || new RegExp(discriptor.key, 'i');
     this.exits[discriptor.key] = discriptor;
   },
 
@@ -143,7 +143,7 @@ Room.prototype = {
     var ret = [this.description];
     ret = ret.concat(this.itemList.map(x=>this.items[x].description));
     ret = ret.concat(this.exitList.map(x=>this.exits[x].description));
-    return ret.join(" ");
+    return ret.join(' ');
   }
 
 };

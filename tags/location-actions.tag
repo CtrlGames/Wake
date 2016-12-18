@@ -25,9 +25,11 @@
   </style>
 
   <script type="babel">
-    var prevent = false;
     this.mixin('tba');
     this.mixin('storage');
+
+    var prevent = false;
+    var cardActive = !!(this.storage.get('activeCards') && ~this.storage.get('activeCards').indexOf('location-actions'));
 
     this.updateTba = function(text){
       this.tba.input(text);
@@ -38,8 +40,10 @@
     })
 
     this.tba.on('cardActivate', (card) => {
-      if (card === 'location-actions') {
+      if (card === 'location-actions' && !cardActive) {
+        console.log('preventing');
         prevent = true;
+        cardActive = true;
       }
     });
 

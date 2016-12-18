@@ -8,6 +8,10 @@ var directionMap = {
   'e': 'east'
 };
 
+tba.addGlobalCommand( { command: /help/, method: function(){
+  this.game.trigger('hint', 'there is no help for you', 3000);
+}});
+
 tba.addGlobalCommand({command: /^look\s?(.*)/, method(){
   var query = this.regExpMatchs.command[1];
   var target;
@@ -63,5 +67,10 @@ tba.addGlobalCommand({command: /inventory/, method(){
 }});
 
 tba.currentRoom = tba.rooms.downBeach;
+
+// custom methods
+tba.wakeUp = function (){
+  this.log('You are woken by the waves lapping at your face.');
+};
 
 export default tba;

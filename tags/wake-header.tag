@@ -56,6 +56,7 @@
     })
 
     this.wakeUp = () => {
+      this.tba.wakeUp();
       this.tba.trigger('cardActivate', 'game-log');
     };
 
@@ -73,7 +74,7 @@
     this.tba.on('hint', (hint, timeout=8000) => {
       this.hint = hint;
       if(hintTimeout) clearTimeout(hintTimeout);
-      to = setTimeout(this.clearHint, timeout);
+      hintTimeout = setTimeout(this.clearHint, timeout);
     });
 
     this.tba.on('roomChange', () => {

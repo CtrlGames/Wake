@@ -33,10 +33,6 @@
   <script type="babel">
     this.mixin('inc');
 
-    this.inc.island.addPool({name:'Wood', key: 'wood', minimum:0});
-    this.inc.island.addPool({name:'String', key: 'string', minimum:0});
-    this.inc.island.addPool({name:'Food', key: 'food', minimum:0});
-
     this.inc.on('poolModified', () => this.update());
     //this.queues = [
       //{label: 'Islands', pools: [

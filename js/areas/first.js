@@ -5,117 +5,83 @@ import * as inc from 'INCInstances.js';
 const downBeach = tba.addRoom({
   key: 'downBeach',
   name: 'Down Beach',
-  description: function(){
+  description(){
     return 'You\'re on a beach.' ;
   },
   actions: [
     {
-      command: /help/,
-      method: function(){
-        this.game.trigger('hint', 'there is no help for you', 3000);
-      }
-    },
-    {
-      command: /please/,
-      method: function(){
-        this.game.trigger('hint', 'no, you\'re done, dude.', 3000);
-      }
-    },
-    {
-      command: /gather dirt/,
+      command: /catch fish/,
       locationButton: true,
-      text: 'Gather dirt',
-      method: function(){
-        return 'you fail to do anything, you suck.';
-      }
-    },
-    {
-      command: /gather rocks/,
-      locationButton: true,
-      text: 'Gather rocks',
-      method: function(){
-        return 'you fail to do anything, you suck.';
-      }
-    },
-    {
-      command: /gather fish/,
-      locationButton: true,
-      text: 'Gather fish',
-      method: function(){
-        return 'you fail to do anything, you suck.';
-      }
-    },
-    {
-      command: /gather sticks/,
-      locationButton: true,
-      text: 'Gather Sticks',
-      method: function(){
-        inc.queues.island.pools.wood.modifyPoolAmount(1);
-        this.game.trigger('poolInc');
-        return 'you pick up a stick, big whoop, wanna fight about it?';
+      text: 'catch fish',
+      method(){
+        return 'You have no fishing pole.';
       }
     }
+  ]
+});
+
+downBeach.addItem({
+  name: 'rock',
+  description: 'There is a rock.',
+  actions: [
+    {command: /take/, method(){
+      if(this.room){
+        this.room.takeItem(this);
+        return 'rock taken';
+      }
+    }},
+    {command: /throw rock(.*)/, method(){
+      //var targetText = this.regExpMatchs.command[1];
+      //var target = this.game.findTarget(targetText);
+      this.drop();
+      return 'You throw the rock';
+    }}
   ]
 });
 
 const upBeach = tba.addRoom({
   key: 'upBeach',
   name: 'Up Beach',
-  description: 'The beach is clear.',
-  enterInit: function(){
-    if (!~storage.get('activeCards').indexOf('location-actions')) this.trigger('cardActivate', 'location-actions');
+  enterInit(){
+    this.trigger('cardActivate', 'location-actions');
   },
   actions: [
     {
-      command: /gather fish/,
       locationButton: true,
-      text: 'Gather fish',
-      method: function(){
-        this.game.trigger('cardActivate', 'increment-pools');
-        return 'you get a fish, but have no way to carry it, you suck.';
+      text: 'search shipwreck',
+    },
+  ]
+});
+
+upBeach.addItem({
+  name: 'shipwreck',
+  accessor: /(ship)?wreck/,
+  description: 'There is a shipwreck.',
+  actions: [
+    {
+      command: /search/,
+      locationButton: true,
+      text: 'search shipwreck',
+      method(){
+        var find = Math.random();
+        if(find < 0.3) {
+          this.game.trigger('cardActivate', 'increment-pools');
+          if (!inc.queues.island.pools.string) inc.queues.island.addPool({name:'String', key: 'string', minimum:0});
+          inc.queues.island.pools.string.modifyPoolAmount(1);
+          this.game.trigger('poolInc');
+          return 'You find some string.';
+        }
+        return "you don't find anything.";
       }
     },
-    {
-      command: /gather sticks/,
-      locationButton: true,
-      text: 'Gather sticks',
-      method: function(){
-        this.game.trigger('cardActivate', 'game-controls');
-        return 'you fail to do anything, you suck.';
-      }
-    },
-    {
-      command: /gather rocks/,
-      locationButton: true,
-      text: 'Gather rocks',
-      method: function(){
-        return 'you fail to do anything, you suck.';
-      }
-    },
-    {
-      command: /gather dirt/,
-      locationButton: true,
-      text: 'Gather Dirt',
-      method: function(){
-        return 'you fail to do anything, you suck.';
-      }
-    },
-    {
-      command: /gather water/,
-      locationButton: true,
-      text: 'Gather water',
-      method: function(){
-        return 'you fail to do anything, you suck.';
-      }
-    }
   ]
 });
 
 const forest = tba.addRoom({
   key: 'forest',
   name: 'Forest Path',
-  description: 'The brush is too thick to continue',
-  enterInit: function(){
+  description: 'There are small trees all around, the brush is too thick to continue',
+  enterInit(){
     this.trigger('cardActivate', 'location-actions');
   },
   actions: [
@@ -123,8 +89,12 @@ const forest = tba.addRoom({
       command: /clear path/,
       locationButton: true,
       text: 'Clear Path',
-      method: function() {
-        return 'No... I will not clear the path.';
+      method(){
+        this.game.trigger('cardActivate', 'increment-pools');
+        if (!inc.queues.island.pools.wood) inc.queues.island.addPool({name:'Wood', key: 'wood', minimum:0});
+        inc.queues.island.pools.wood.modifyPoolAmount(1);
+        this.game.trigger('poolInc');
+        return 'you pick up a stick, big whoop, wanna fight about it?';
       }
     }
   ]
@@ -139,7 +109,7 @@ downBeach.addExit({
 
 downBeach.addExit({
   key: 'forest',
-  accessor: /forest|inland/,
+  accessor: /forest|inland|in/,
   room: forest,
   description: 'you can go inland.'
 });
