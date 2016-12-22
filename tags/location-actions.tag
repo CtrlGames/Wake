@@ -4,6 +4,7 @@
       class="animated fadeIn"
       style={"animation-delay: " + .05*index + "s"}
       click={ parent.updateTba.bind(this, action.text) }
+      timer-name={ action.text.replace(/\s/, '').toLowerCase() }
     >
       { action.text }
     </btn>
@@ -41,7 +42,6 @@
 
     this.tba.on('cardActivate', (card) => {
       if (card === 'location-actions' && !cardActive) {
-        console.log('preventing');
         prevent = true;
         cardActive = true;
       }

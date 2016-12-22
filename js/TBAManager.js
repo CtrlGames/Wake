@@ -8,6 +8,8 @@ var directionMap = {
   'e': 'east'
 };
 
+var visitedRooms = [];
+
 tba.addGlobalCommand( { command: /help/, method: function(){
   this.game.trigger('hint', 'there is no help for you', 3000);
 }});
@@ -30,7 +32,10 @@ tba.addGlobalCommand({command: /^(go|g)\s(.*)/, method(){
   for (var key in this.currentRoom.exits) {
     if(this.currentRoom.exits.hasOwnProperty(key)) {
       if(this.currentRoom.exits[key].accessor.test(direction)) {
-        return this.enterRoom(this.currentRoom.exits[key].room);
+        var roomDescription = this.enterRoom(this.currentRoom.exits[key].room);
+        if (~visitedRooms.indexOf(key)) return this.currentRoom.name;
+        visitedRooms.push(this.currentRoom.key);
+        return roomDescription;
       }
     }
   }
@@ -38,8 +43,8 @@ tba.addGlobalCommand({command: /^(go|g)\s(.*)/, method(){
   return this.invalidExit;
 }});
 
-tba.addGlobalCommand({command: /take\s?(.*)/, method(){
-  var target = this.findTarget(this.regExpMatchs.command[1]);
+tba.addGlobalCommand({command: /(take|pick up|get)\s?(.*)/, method(){
+  var target = this.findTarget(this.regExpMatchs.command[2]);
   if(!target || !target.getCommand('take')) return 'Cannot take that.';
   else if(!target.room) return target.key+' already taken';
 }});
@@ -67,10 +72,11 @@ tba.addGlobalCommand({command: /inventory/, method(){
 }});
 
 tba.currentRoom = tba.rooms.downBeach;
+visitedRooms.push(tba.rooms.downBeach.key);
 
 // custom methods
 tba.wakeUp = function (){
-  this.log('You are woken by the waves lapping at your face.');
+  this.log('You wake up on a rough sand beach. Calm waves rush up beside you.');
 };
 
 export default tba;

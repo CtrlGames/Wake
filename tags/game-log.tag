@@ -6,7 +6,7 @@
   <div class=gameLog__log name=gameLog>
     <div class="gameLog__logEntry animated" each={ logEntries }>
       <div class="command" if={ command }>> { command } </div>
-      <div class={ "output " + className }>{ output }</div>
+      <raw class={ "output " + className } output={ output } />
     </div>
   </div>
 

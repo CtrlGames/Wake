@@ -1,19 +1,19 @@
 import tba from 'TBAInstance.js';
-import * as storage from 'storage.js';
-import * as inc from 'INCInstances.js';
+import inc from 'INCInstances.js';
 
 const downBeach = tba.addRoom({
   key: 'downBeach',
   name: 'Down Beach',
-  description(){
-    return 'You\'re on a beach.' ;
-  },
   actions: [
     {
       command: /catch fish/,
       locationButton: true,
-      text: 'catch fish',
+      text: 'Catch fish',
       method(){
+        const duration = 3000;
+        if (this.fishingTimeout) return "You're too tired to fish.";
+        this.fishingTimeout = setTimeout(() => delete this.fishingTimeout, duration);
+        this.game.trigger('btnTimer-catchfish', duration);
         return 'You have no fishing pole.';
       }
     }
@@ -21,20 +21,29 @@ const downBeach = tba.addRoom({
 });
 
 downBeach.addItem({
-  name: 'rock',
+  key: 'tide pool',
+  accessor: /tide pool|pool/,
+  description: 'The water is calm in a large tide pool.',
+  detail: 'There are probably fish in there.',
+});
+
+downBeach.addItem({
+  key: 'rock',
   description: 'There is a rock.',
+  detail: "It's pretty cool, I guess.",
   actions: [
-    {command: /take/, method(){
+    {command: /take|get|pick up/, method(){
       if(this.room){
         this.room.takeItem(this);
         return 'rock taken';
       }
     }},
     {command: /throw rock(.*)/, method(){
-      //var targetText = this.regExpMatchs.command[1];
-      //var target = this.game.findTarget(targetText);
+      if (this.room) {
+        return 'You are not holding the rock.';
+      }
       this.drop();
-      return 'You throw the rock';
+      return 'You throw the rock.';
     }}
   ]
 });
@@ -48,96 +57,103 @@ const upBeach = tba.addRoom({
   actions: [
     {
       locationButton: true,
-      text: 'search shipwreck',
+      text: 'Search shipwreck',
     },
   ]
 });
 
 upBeach.addItem({
-  name: 'shipwreck',
-  accessor: /(ship)?wreck/,
-  description: 'There is a shipwreck.',
+  key: 'shipwreck',
+  accessor: /ship|wreck/,
+  description: 'The shipwreck is here.',
+  detail: 'You can probably find some things in here if you <b>search</b> it.',
   actions: [
-    {
-      command: /search/,
-      locationButton: true,
-      text: 'search shipwreck',
-      method(){
-        var find = Math.random();
-        if(find < 0.3) {
-          this.game.trigger('cardActivate', 'increment-pools');
-          if (!inc.queues.island.pools.string) inc.queues.island.addPool({name:'String', key: 'string', minimum:0});
-          inc.queues.island.pools.string.modifyPoolAmount(1);
-          this.game.trigger('poolInc');
-          return 'You find some string.';
-        }
-        return "you don't find anything.";
+    {command: /search/, method(){
+      const duration = 1000;
+      if (this.searchTimer) return "You can't do it...";
+      this.searchTimer = setTimeout(()=> delete this.searchTimer, duration);
+      this.game.trigger('btnTimer-searchshipwreck', duration);
+      var find = Math.random();
+      if (find < 0.3) {
+        this.game.trigger('cardActivate', 'increment-pools');
+        inc.island.modifyPoolAmount('string', 1);
+        return 'You find some string.';
       }
-    },
+      return "you don't find anything.";
+    }},
   ]
 });
 
 const forest = tba.addRoom({
   key: 'forest',
   name: 'Forest Path',
-  description: 'There are small trees all around, the brush is too thick to continue',
+  description: 'There are small trees all around, the brush is too thick to continue.',
   enterInit(){
     this.trigger('cardActivate', 'location-actions');
   },
   actions: [
     {
-      command: /clear path/,
+      command: /clear (path|brush)/,
       locationButton: true,
-      text: 'Clear Path',
+      text: 'Clear path',
       method(){
+        const duration = 5000;
+        if (this.clearTimeout) return 'You fail.';
+        this.clearTimeout = setTimeout(() => delete this.clearTimeout, duration);
+        this.game.trigger('btnTimer-clearpath', duration);
         this.game.trigger('cardActivate', 'increment-pools');
-        if (!inc.queues.island.pools.wood) inc.queues.island.addPool({name:'Wood', key: 'wood', minimum:0});
-        inc.queues.island.pools.wood.modifyPoolAmount(1);
-        this.game.trigger('poolInc');
+        inc.island.modifyPoolAmount('wood', 1);
         return 'you pick up a stick, big whoop, wanna fight about it?';
       }
     }
   ]
 });
 
+forest.addItem({
+  key: 'brush',
+  detail: "This will need to be cleared if you want to continue."
+});
+
+// Exits
+
 downBeach.addExit({
-  key: 'up beach',
+  key: upBeach.key,
   accessor: /up.*beach|up/,
   room: upBeach,
-  description: 'You can go up the beach'
+  description: 'You can go up the beach.'
 });
 
 downBeach.addExit({
-  key: 'forest',
+  key: forest.key,
   accessor: /forest|inland|in/,
   room: forest,
   description: 'you can go inland.'
 });
 
 upBeach.addExit({
-  key: 'down beach',
+  key: downBeach.key,
   accessor: /down.*beach|down/,
   room: downBeach,
   description: 'You can go down the beach.'
 });
 
 upBeach.addExit({
-  key: 'forest',
-  accessor: /forest|inland/, 
+  key: forest.key,
+  accessor: /forest|inland|in/, 
   room: forest,
   description: 'you can go inland.'
 });
 
 
 forest.addExit({
-  key: 'down beach',
+  key: downBeach.key,
   accessor: /down.*beach|down/,
   room: downBeach,
   description: 'You can go down the beach.'
 });
 
 forest.addExit({
-  key: 'up beach',
+  key: upBeach.key,
   accessor: /up.*beach|up/,
   room: upBeach,
   description: 'You can go up the beach.'

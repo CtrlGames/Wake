@@ -34,14 +34,5 @@
     this.mixin('inc');
 
     this.inc.on('poolModified', () => this.update());
-    //this.queues = [
-      //{label: 'Islands', pools: [
-        //{name: "wood", value: 10},
-        //{name: "string", value: 5},
-        //{name: "food", value: 15}
-      //]}
-    //];
-
-
   </script>
 </increment-pools>
