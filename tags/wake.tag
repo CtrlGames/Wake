@@ -60,16 +60,20 @@
 
   <script type=babel>
     this.mixin('tba');
+    this.mixin('inc');
     this.mixin('storage');
     this.activeCards = this.storage.get('activeCards')? JSON.parse(this.storage.get('activeCards')):['wake-header'];
 
-    this.tba.on('cardActivate', (card) => {
+    var onCardActivate = (card) => {
       if(!~this.activeCards.findIndex(e => e===card)) {
         this.activeCards.push(card);
-        this.storage.set('activeCards', JSON.stringify(this.activeCards))
+        this.storage.set('activeCards', JSON.stringify(this.activeCards));
         this.update();
       }
-    });
+    };
+
+    this.tba.on('cardActivate', onCardActivate);
+    this.inc.on('cardActivate', onCardActivate);
 
     this.tba.on('died', () => {
       this.activeCards = ['wake-header'];

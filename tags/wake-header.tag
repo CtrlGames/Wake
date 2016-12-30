@@ -53,7 +53,7 @@
         hint = val;
         this.update();
       }
-    })
+    });
 
     this.wakeUp = () => {
       this.tba.wakeUp();
@@ -79,7 +79,7 @@
 
     this.tba.on('roomChange', () => {
       this.locationName.addEventListener("animationend", () => { 
-        this.update() 
+        this.update();
         this.locationName.classList.remove("fadeOut");
         this.locationName.classList.add("fadeIn");
       }, false);

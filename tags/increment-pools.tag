@@ -10,9 +10,6 @@
       </div>
     </yield>
   </tabs>
-  <ul>
-    <li riot-tag="pool" each={ incPools }></li>
-  </ul>
 
   <style type=sass>
     @import "sass/vars";

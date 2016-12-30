@@ -1,5 +1,5 @@
 <btn>
-  <button onclick={ click }>
+  <button onclick={ click } disabled={ opts.disable === false }>
     <yield />
     <span name="pb" class="progressBackground"></span>
   </button>
@@ -34,7 +34,7 @@
 
   <script type="babel">
     this.mixin('tba');
-    this.click = this.opts.click;
+    this.click = opts.click;
 
     if (this.opts.timerName){
       this.tba.on(`btnTimer-${this.opts.timerName}`, (timeout=3000) => {
@@ -49,6 +49,6 @@
 
     this.on('unmount', () => {
       this.tba.off(`btnTimer-${this.opts.timerName}`);
-    })
+    });
   </script>
 </btn>

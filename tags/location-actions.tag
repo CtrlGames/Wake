@@ -38,7 +38,7 @@
 
     Object.defineProperty(this, 'actions', {
       get: () => this.tba.currentRoom.actions.filter(e => e.locationButton)
-    })
+    });
 
     this.tba.on('cardActivate', (card) => {
       if (card === 'location-actions' && !cardActive) {
@@ -50,7 +50,7 @@
     this.tba.on('roomChange', () => {
       var btns = this.root.querySelectorAll('btn');
       btns[0].addEventListener("animationend", () => { 
-        this.update() 
+        this.update() ;
       }, false);
       if(!prevent) btns.forEach(e => e.className = "animated fadeOut");
       else prevent = false;

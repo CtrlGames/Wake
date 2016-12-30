@@ -42,7 +42,8 @@
       "es6": true
     },
     "globals": {
-      "riot": true
+      "riot": true,
+      "opts": true
     },
     "extends": "eslint:recommended",
     "parserOptions": {

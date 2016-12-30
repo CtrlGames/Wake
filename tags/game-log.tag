@@ -77,18 +77,18 @@
 
     this.inputkeyup = function(e){
       if(e.key == "Enter") this.logInput();
-    }
+    };
 
     this.logInput = function(){
-        this.tba.input(this.inputText.value);
-        this.inputText.select();
-    }
+      this.tba.input(this.inputText.value);
+      this.inputText.select();
+    };
 
     this.log = function(logOb) {
       if(typeof logOb === "string") logOb = {output: logOb};
       if(logOb.output) this.logEntries.unshift(logOb);
       return this.update; // returned so you can manually update the log if need be.
-    }
+    };
 
     this.on('mount', () => this.inputText.focus());
     this.tba.on('log', lobOb => this.log(lobOb)());

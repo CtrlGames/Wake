@@ -10,10 +10,20 @@ const downBeach = tba.addRoom({
       locationButton: true,
       text: 'Catch fish',
       method(){
-        const duration = 3000;
-        if (this.fishingTimeout) return "You're too tired to fish.";
-        this.fishingTimeout = setTimeout(() => delete this.fishingTimeout, duration);
-        this.game.trigger('btnTimer-catchfish', duration);
+        if (inc.island.getPoolAmount('fishing pole') > 0) {
+          const duration = 3000;
+          if (this.fishingTimeout) return "You're too tired to fish.";
+          this.fishingTimeout = setTimeout(() => delete this.fishingTimeout, duration);
+          this.game.trigger('btnTimer-catchfish', duration);
+
+          if (Math.random() > 0.5) {
+            var fishSize = Math.ceil(Math.random()*3);
+            var fishSizeChart = ['small ', '', 'big '];
+            inc.island.modifyPoolAmount('food', fishSize);
+            return `You Catch a ${fishSizeChart[--fishSize]}fish.`;
+          }
+          else return 'You don\'t catch anything';
+        }
         return 'You have no fishing pole.';
       }
     }
@@ -38,12 +48,13 @@ downBeach.addItem({
         return 'rock taken';
       }
     }},
-    {command: /throw rock(.*)/, method(){
-      if (this.room) {
-        return 'You are not holding the rock.';
-      }
+    {command: /throw(.*)/, method(){
+      if (this.room) return 'You are not holding the rock.';
+      var targetText = this.regExpMatchs.command[1];
+      var target = this.game.findTarget(targetText);
       this.drop();
-      return 'You throw the rock.';
+      if (target && target.hitWithRock) return 'You throw the rock. '+target.hitWithRock();
+      else return 'You throw the rock.';
     }}
   ]
 });
@@ -67,6 +78,9 @@ upBeach.addItem({
   accessor: /ship|wreck/,
   description: 'The shipwreck is here.',
   detail: 'You can probably find some things in here if you <b>search</b> it.',
+  hitWithRock(){
+    return 'There is a satisfying clang.';
+  },
   actions: [
     {command: /search/, method(){
       const duration = 1000;

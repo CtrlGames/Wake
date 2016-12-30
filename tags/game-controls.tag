@@ -1,15 +1,11 @@
 <game-controls>
   <tabs>
     <yield to=tabs>
-      <a for=tools>Tools</a>
-      <a for=buildings>Buildings</a>
+      <a each={ group, buttons in parent.availableControls } for={ group }>{ group }</a>
     </yield>
     <yield to=content>
-      <div name=tools>
-        <h1>tools</h1>
-      </div>
-      <div name=buildings>
-        <h1>buildings</h1>
+      <div each={ group, buttons in parent.availableControls } name={ group }>
+        <btn each={ buttons } click={ parent.parent.parent.clickHandle.bind(this, method) } disable={ parent.parent.parent.checkRequirements(requirements) }>{ name }</btn>
       </div>
     </yield>
   </tabs>
@@ -30,5 +26,53 @@
   </style>
 
   <script type="babel">
+    this.mixin('inc');
+    this.mixin('controls');
+    this.availableControls = {};
+
+    var active = false;
+    const foundButtons = [];
+
+    this.clickHandle = function(method){
+      if (method) method();
+      this.update();
+    };
+
+    this.checkRequirements = reqs => {
+      var ret = true;
+      for (let key in reqs) {
+        if(this.inc.island.getPoolAmount(key) < reqs[key]) {
+          ret = false;
+          break;
+        }
+      }
+      return ret;
+    };
+
+    var isButtonFound = (name) => {
+      return !!~foundButtons.indexOf(name);
+    };
+
+    var updateAvailableControls = () => {
+      var possibleControls = {};
+
+      for (let groupKey in this.controls) {
+        possibleControls[groupKey] = this.controls[groupKey].filter((e) => {
+          if (!isButtonFound(e.name) && this.checkRequirements(e.requirements)) foundButtons.push(e.name);
+          return isButtonFound(e.name);
+        });
+        if (!possibleControls[groupKey].length) delete possibleControls[groupKey];
+      }
+
+      this.availableControls = possibleControls;
+      this.update();
+      if (foundButtons.length && !active) {
+        active = true;
+        this.inc.trigger('cardActivate', 'game-controls');
+      }
+    };
+
+    updateAvailableControls();
+    document.addEventListener('tick', updateAvailableControls);
   </script>
 </game-controls>

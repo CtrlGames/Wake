@@ -63,7 +63,6 @@
 
 
       &__tabContent
-        overflow: hidden
 
         & > div
           animation-duration: $animationDuration
@@ -76,19 +75,20 @@
   </style>
 
   <script type=babel>
+
     this.selectTab = function(e){
-      if(!e.target.getAttribute('for') || e.target.classList.contains('selected')) return
+      if(!e.target.getAttribute('for') || e.target.classList.contains('selected')) return;
       this.deselectAll(() => {
-        this[e.target.getAttribute('for')].classList.add('selected');
+        this.tabContent.querySelector(`[name=${e.target.getAttribute('for')}]`).classList.add('selected');
       });
       e.target.classList.add('selected');
-    }
+    };
 
     this.deselectAll = function(callback) {
       this.tabContent.callback = callback;
       this.tabs.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'));
       this.tabContent.classList.add('fadeOut');
-    }
+    };
 
     this.tabContent.addEventListener("animationend", () => { 
       if (this.tabContent.classList.contains('fadeOut')) {
@@ -100,10 +100,10 @@
 
     this.noneSelected = function(){
       return (!this.tabs.querySelectorAll('.selected').length);
-    }
+    };
 
-    this.on('mount', () => {
-      if(this.noneSelected()){
+    this.on('update', () => {
+      if(this.tabs.children.length && this.noneSelected()){
         this.tabs.querySelector('a').classList.add('selected');
         this.tabContent.querySelector('div').classList.add('selected');
       }
