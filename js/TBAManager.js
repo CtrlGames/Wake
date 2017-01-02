@@ -1,4 +1,5 @@
 import tba from 'TBAInstance.js';
+import { get as storageGet } from 'storage.js';
 import 'areas/first.js'; // load the first area
 
 var directionMap = {
@@ -65,18 +66,14 @@ tba.addGlobalCommand({command: /^drop\s?(.*)/, method(){
   }
 }});
 
-tba.addGlobalCommand({command: /inventory/, method(){
+tba.addGlobalCommand({command: /^i$|inventory/, method(){
   return this.inventoryList.length? 
     this.inventoryList.map(e=>this.inventory[e].name).join('\n')
     : this.emptyInventory;
 }});
 
-tba.currentRoom = tba.rooms.downBeach;
-visitedRooms.push(tba.rooms.downBeach.key);
-
-// custom methods
-tba.wakeUp = function (){
-  this.log('You wake up on a rough sand beach. Calm waves rush up beside you.');
-};
+var currentRoom = storageGet('currentLocation');
+tba.currentRoom = tba.rooms[currentRoom] || tba.rooms.downBeach;
+visitedRooms.push(tba.currentRoom.key);
 
 export default tba;

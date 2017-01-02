@@ -192,4 +192,4 @@ Item.prototype = {
 
 };
 
-export default TBAEngine;
+export { TBAEngine as default, Room , Item };

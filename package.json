@@ -19,6 +19,7 @@
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-core": "^6.18.0",
+    "babel-plugin-proxy": "^1.1.0",
     "babel-preset-es2015-riot": "^1.1.0",
     "eslint": "^3.9.0",
     "eslint-plugin-riot": "^0.1.6",

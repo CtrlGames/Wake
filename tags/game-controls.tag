@@ -28,10 +28,11 @@
   <script type="babel">
     this.mixin('inc');
     this.mixin('controls');
+    this.mixin('storage');
     this.availableControls = {};
 
     var active = false;
-    const foundButtons = [];
+    const foundButtons = this.storage.get('foundButtons') || [];
 
     this.clickHandle = function(method){
       if (method) method();
@@ -55,6 +56,7 @@
 
     var updateAvailableControls = () => {
       var possibleControls = {};
+      var previouslyFound = foundButtons.length;
 
       for (let groupKey in this.controls) {
         possibleControls[groupKey] = this.controls[groupKey].filter((e) => {
@@ -70,6 +72,7 @@
         active = true;
         this.inc.trigger('cardActivate', 'game-controls');
       }
+      if(foundButtons.length !== previouslyFound) this.storage.set('foundButtons', foundButtons);
     };
 
     updateAvailableControls();

@@ -21,7 +21,7 @@ const queues = Object.create({
   }
 });
 
-queues.island = new ModInc();
+queues.addQueue('island');
 
 riot.observable(queues);
 

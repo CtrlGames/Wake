@@ -16,7 +16,7 @@ const downBeach = tba.addRoom({
           this.fishingTimeout = setTimeout(() => delete this.fishingTimeout, duration);
           this.game.trigger('btnTimer-catchfish', duration);
 
-          if (Math.random() > 0.5) {
+          if (!this.items['tide pool'].state.hasRock && Math.random() > 0.5) {
             var fishSize = Math.ceil(Math.random()*3);
             var fishSizeChart = ['small ', '', 'big '];
             inc.island.modifyPoolAmount('food', fishSize);
@@ -26,26 +26,51 @@ const downBeach = tba.addRoom({
         }
         return 'You have no fishing pole.';
       }
-    }
+    },
   ]
 });
 
 downBeach.addItem({
   key: 'tide pool',
   accessor: /tide pool|pool/,
+  state: {
+    hasRock: false
+  },
   description: 'The water is calm in a large tide pool.',
-  detail: 'There are probably fish in there.',
+  detail(){
+    if (this.state.hasRock) return 'The rock probably scared the fish away.';
+    else return 'There are probably fish in there.';
+  },
+  hitWithRock(){
+    var rock = this.game.currentRoom.items.rock;
+    this.setState('hasRock', true);
+    rock.setState('wet', true);
+    return "It splashes into the pool.";
+  }
 });
 
-downBeach.addItem({
+tba.loadItem('downBeach', {
   key: 'rock',
-  description: 'There is a rock.',
-  detail: "It's pretty cool, I guess.",
+  description(){
+    if (this.game.currentRoom.key === 'downBeach' && this.game.currentRoom.items['tide pool'].state.hasRock) return 'There is a rock in the pool.';
+    return 'There is a rock.';
+  },
+  detail(){
+    if(this.state.wet) return "The rock is wet";
+    return "It's pretty cool, I guess.";
+  },
+  state: {
+    wet: false
+  },
   actions: [
     {command: /take|get|pick up/, method(){
       if(this.room){
         this.room.takeItem(this);
-        return 'rock taken';
+        if (this.state.wet) {
+          setTimeout(()=>this.setState('wet', false), 9000);
+          return 'you pick up the wet rock';
+        }
+        return 'rock taken.';
       }
     }},
     {command: /throw(.*)/, method(){
@@ -55,6 +80,11 @@ downBeach.addItem({
       this.drop();
       if (target && target.hitWithRock) return 'You throw the rock. '+target.hitWithRock();
       else return 'You throw the rock.';
+    }},
+    {command: /dry/, method(){
+      if(!this.state.wet) return 'the rock is already dry.';
+      this.setState('wet', false);
+      return 'you dry the rock off';
     }}
   ]
 });
@@ -62,6 +92,7 @@ downBeach.addItem({
 const upBeach = tba.addRoom({
   key: 'upBeach',
   name: 'Up Beach',
+  description: 'The shipwreck is here.',
   enterInit(){
     this.trigger('cardActivate', 'location-actions');
   },
@@ -76,7 +107,6 @@ const upBeach = tba.addRoom({
 upBeach.addItem({
   key: 'shipwreck',
   accessor: /ship|wreck/,
-  description: 'The shipwreck is here.',
   detail: 'You can probably find some things in here if you <b>search</b> it.',
   hitWithRock(){
     return 'There is a satisfying clang.';
