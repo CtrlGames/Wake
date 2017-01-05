@@ -8,8 +8,9 @@ function getButton(group, name) {
 const config = {
   tools: [
     {
-      name: 'fishing pole', key: 'fishing pole',
+      name: 'fishing pole',
       requirements: { wood: 1, string: 1 },
+      details: { group: 'tools' },
       method(){
         inc.island.modifyPoolAmount('fishing pole', 1, getButton('tools', 'fishing pole'));
         tba.log("You are able to create a makeshift fishing pole.");
@@ -18,8 +19,9 @@ const config = {
   ],
   buildings: [
     {
-      name: 'hut', key: 'hut',
+      name: 'hut',
       requirements: { wood: 2 },
+      details: { group: 'buildings' },
       method(){
         inc.island.modifyPoolAmount('hut', 1, getButton('buildings', 'hut'));
         tba.log("You construct a small hut. Note that in the future this will take some time, and you will be able to add workers to speed it up.");

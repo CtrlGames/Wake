@@ -1,4 +1,3 @@
-
 <increment-pools>
   <tabs>
     <yield to=tabs>
@@ -6,7 +5,9 @@
     </yield>
     <yield to=content>
       <div each={ area, queue in parent.inc } name={ area }>
-        <pool each={ name, pool in queue.pools } />
+        <div class=group each={ parent.parent.group(queue) }>
+          <pool each={ name, pool in pools } />
+        </div>
       </div>
     </yield>
   </tabs>
@@ -25,11 +26,33 @@
         bottom: 0
         padding: 5px 10px 6px 10px
 
+      .group
+        padding-bottom: $gutter/1.3
+
   </style>
 
   <script type="babel">
     this.mixin('inc');
 
-    this.inc.on('poolModified', () => this.update());
+    var groupOrder = ['basic', 'tools', 'buildings'];
+
+    this.group = (queue) => {
+      var ret = [];
+      var groupMap = {};
+      for (let k in queue.pools) {
+        if (!queue.pools.hasOwnProperty(k)) continue;
+        let g = queue.pools[k].details.group || 'basic';
+        if (groupMap[g] === undefined) groupMap[g] = ret.push({
+          pools: {},
+          position: groupOrder.indexOf(g) || 0
+        })-1;
+        ret[groupMap[g]].pools[k] = queue.pools[k];
+      }
+      return ret.sort((a,b) => a.position-b.position);
+    };
+
+    this.inc.on('poolModified', () => {
+      this.update();
+    });
   </script>
 </increment-pools>
