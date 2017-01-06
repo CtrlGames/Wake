@@ -67,6 +67,10 @@
           font-weight: bold
           color: $shade3
 
+        .exits
+          padding-top: 5px
+          font-size: 0.9em
+
   </style>
 
   <script type=babel>

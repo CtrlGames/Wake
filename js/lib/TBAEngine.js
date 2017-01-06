@@ -141,9 +141,11 @@ Room.prototype = {
 
   getDescription(){
     var ret = [this.description];
-    ret = ret.concat(this.itemList.map(x=>this.items[x].description));
-    ret = ret.concat(this.exitList.map(x=>this.exits[x].description));
-    return ret.join(' ');
+    ret = ret.concat(this.itemList.map(x=>this.items[x].description)).join(' ');
+    ret += '<div class="exits">You can go: ';
+    ret += this.exitList.map(x=>this.exits[x].description).join(', ');
+    ret += '</div>';
+    return ret;
   }
 
 };

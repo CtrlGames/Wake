@@ -164,28 +164,28 @@ downBeach.addExit({
   key: upBeach.key,
   accessor: /up.*beach|up/,
   room: upBeach,
-  description: 'You can go up the beach.'
+  description: 'up the beach'
 });
 
 downBeach.addExit({
   key: forest.key,
   accessor: /forest|inland|in/,
   room: forest,
-  description: 'you can go inland.'
+  description: 'inland'
 });
 
 upBeach.addExit({
   key: downBeach.key,
   accessor: /down.*beach|down/,
   room: downBeach,
-  description: 'You can go down the beach.'
+  description: 'down the beach'
 });
 
 upBeach.addExit({
   key: forest.key,
   accessor: /forest|inland|in/, 
   room: forest,
-  description: 'you can go inland.'
+  description: 'inland'
 });
 
 
@@ -193,12 +193,12 @@ forest.addExit({
   key: downBeach.key,
   accessor: /down.*beach|down/,
   room: downBeach,
-  description: 'You can go down the beach.'
+  description: 'down the beach'
 });
 
 forest.addExit({
   key: upBeach.key,
   accessor: /up.*beach|up/,
   room: upBeach,
-  description: 'You can go up the beach.'
+  description: 'up the beach'
 });
