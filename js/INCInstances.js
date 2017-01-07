@@ -4,10 +4,10 @@ class ModInc extends INC {
   constructor(){
     super();
   }
-  modifyPoolAmount(pool, amount, details) {
+  modifyPoolAmount(pool, amount, details, override=false) {
     details = Object.assign({name:pool, key: pool, minimum:0}, details);
     if (!this.pools[pool]) this.addPool(details);
-    this.pools[pool].modifyPoolAmount(amount);
+    this.pools[pool].modifyPoolAmount(amount, override);
     queues.trigger('poolModified');
   }
   getPoolAmount(pool) {

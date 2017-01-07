@@ -5,7 +5,7 @@
     </yield>
     <yield to=content>
       <div each={ group, buttons in parent.availableControls } name={ group }>
-        <btn each={ buttons } click={ parent.parent.parent.clickHandle.bind(this, method) } disable={ parent.parent.parent.checkRequirements(requirements) }>{ name }</btn>
+        <btn each={ buttons } click={ parent.parent.parent.clickHandle.bind(this, method) } disable={ parent.parent.parent.checkRequirements(name) }>{ name }</btn>
       </div>
     </yield>
   </tabs>
@@ -29,6 +29,7 @@
     this.mixin('inc');
     this.mixin('controls');
     this.mixin('storage');
+    this.mixin('incPools');
     this.availableControls = {};
 
     var active = false;
@@ -39,8 +40,10 @@
       this.update();
     };
 
-    this.checkRequirements = reqs => {
+    this.checkRequirements = name => {
+      if (!name || !this.incPools.name) return false;
       var ret = true;
+      var reqs = this.incPools[name].requirements;
       for (let key in reqs) {
         if(this.inc.island.getPoolAmount(key) < reqs[key]) {
           ret = false;
