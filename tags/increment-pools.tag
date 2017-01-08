@@ -37,20 +37,6 @@
     this.mixin('incPools');
 
     var groupOrder = ['basic', 'tools', 'buildings'];
-    var incStorage = this.storage.get('incStorage');
-
-    // load inc from storage
-    if (incStorage) {
-      for (let areaK in incStorage) {
-        if(!incStorage.hasOwnProperty(areaK)) continue;
-        let area = incStorage[areaK];
-        this.inc.addQueue(areaK);
-        for (let poolK in area) {
-          if (!area.hasOwnProperty(poolK)) continue;
-          this.inc[areaK].modifyPoolAmount(poolK, area[poolK], this.incPools[poolK], true);
-        }
-      }
-    } 
 
     this.group = (queue) => {
       var ret = [];
@@ -67,21 +53,6 @@
       return ret.sort((a,b) => a.position-b.position);
     };
 
-    this.inc.on('poolModified', () => {
-      this.update();
-      var storageOb = {};
-
-      for (let areaK in this.inc) {
-        if(!this.inc.hasOwnProperty(areaK)) continue;
-        let area = this.inc[areaK];
-        storageOb[areaK] = {};
-        for (let poolK in area.pools) {
-          if(!area.pools.hasOwnProperty(poolK)) continue;
-          storageOb[areaK][poolK] = area.pools[poolK].amount;
-        }
-      }
-
-      this.storage.set('incStorage', storageOb);
-    });
+    this.inc.on('poolModified', () => this.update() );
   </script>
 </increment-pools>

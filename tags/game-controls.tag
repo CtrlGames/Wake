@@ -41,7 +41,7 @@
     };
 
     this.checkRequirements = name => {
-      if (!name || !this.incPools.name) return false;
+      if (!name || !this.incPools[name]) return false;
       var ret = true;
       var reqs = this.incPools[name].requirements;
       for (let key in reqs) {
@@ -63,7 +63,7 @@
 
       for (let groupKey in this.controls) {
         possibleControls[groupKey] = this.controls[groupKey].filter((e) => {
-          if (!isButtonFound(e.name) && this.checkRequirements(e.requirements)) foundButtons.push(e.name);
+          if (!isButtonFound(e.name) && this.checkRequirements(e.name)) foundButtons.push(e.name);
           return isButtonFound(e.name);
         });
         if (!possibleControls[groupKey].length) delete possibleControls[groupKey];
@@ -79,6 +79,6 @@
     };
 
     updateAvailableControls();
-    document.addEventListener('tick', updateAvailableControls);
+    this.inc.on('poolModified', updateAvailableControls);
   </script>
 </game-controls>

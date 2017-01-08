@@ -52,7 +52,7 @@
       btns[0].addEventListener("animationend", () => { 
         this.update() ;
       }, false);
-      if(!prevent) btns.forEach(e => e.className = "animated fadeOut");
+      if(!prevent) Array.prototype.forEach.call(btns, e => e.className = "animated fadeOut");
       else prevent = false;
     });
 

@@ -26,6 +26,7 @@
       &__gameBoard
         display: flex
         flex: 1 1 auto
+        height: 0px
 
       &__gameControls
         display: flex

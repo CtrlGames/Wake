@@ -86,13 +86,13 @@
 
     this.deselectAll = function(callback) {
       this.tabContent.callback = callback;
-      this.tabs.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'));
+      Array.prototype.forEach.call(this.tabs.querySelectorAll('.selected'), e => e.classList.remove('selected'));
       this.tabContent.classList.add('fadeOut');
     };
 
     this.tabContent.addEventListener("animationend", () => { 
       if (this.tabContent.classList.contains('fadeOut')) {
-        this.tabContent.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'));
+        Array.prototype.forEach.call(this.tabContent.querySelectorAll('.selected'), e => e.classList.remove('selected'));
         if(this.tabContent.callback) this.tabContent.callback();
         this.tabContent.classList.remove('fadeOut');
       }
@@ -102,7 +102,7 @@
       return (!this.tabs.querySelectorAll('.selected').length);
     };
 
-    this.on('update', () => {
+    this.on('mount', () => {
       if(this.tabs.children.length && this.noneSelected()){
         this.tabs.querySelector('a').classList.add('selected');
         this.tabContent.querySelector('div').classList.add('selected');
