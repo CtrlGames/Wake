@@ -17,10 +17,10 @@ const downBeach = tba.addRoom({
           this.game.trigger('btnTimer-catchfish', duration);
 
           if (!this.items['tide pool'].state.hasRock && Math.random() > 0.5) {
-            var fishSize = Math.ceil(Math.random()*3);
+            var fishSize = Math.floor(Math.random()*3);
             var fishSizeChart = ['small ', '', 'big '];
             inc.island.modifyPoolAmount('food', fishSize);
-            return `You Catch a ${fishSizeChart[--fishSize]}fish.`;
+            return `You Catch a ${fishSizeChart[fishSize]}fish.`;
           }
           else return 'You don\'t catch anything';
         }
@@ -34,7 +34,7 @@ downBeach.addItem({
   key: 'tide pool',
   accessor: /tide pool|pool/,
   state: {
-    hasRock: false
+    hasRock: false,
   },
   description: 'The water is calm in a large tide pool.',
   detail(){
@@ -45,6 +45,7 @@ downBeach.addItem({
     var rock = this.game.currentRoom.items.rock;
     this.setState('hasRock', true);
     rock.setState('wet', true);
+    rock.setState('location', this.key);
     return "It splashes into the pool.";
   }
 });
@@ -60,15 +61,18 @@ tba.loadItem('downBeach', {
     return "It's pretty cool, I guess.";
   },
   state: {
-    wet: false
+    wet: false,
+    location: null
   },
   actions: [
     {command: /take|get|pick up/, method(){
       if(this.room){
         this.room.takeItem(this);
-        if (this.state.wet) {
+        if (this.state.location === 'tide pool') {
           setTimeout(()=>this.setState('wet', false), 9000);
-          return 'you pick up the wet rock';
+          this.game.currentRoom.items[this.state.location].setState('hasRock', false);
+          this.setState('location', null);
+          return 'you pick up the wet rock.';
         }
         return 'rock taken.';
       }
@@ -137,14 +141,14 @@ const forest = tba.addRoom({
   },
   actions: [
     {
-      command: /clear (path|brush)/,
+      command: /clear (area|brush)/,
       locationButton: true,
-      text: 'Clear path',
+      text: 'Clear area',
       method(){
         const duration = 5000;
         if (this.clearTimeout) return 'You fail.';
         this.clearTimeout = setTimeout(() => delete this.clearTimeout, duration);
-        this.game.trigger('btnTimer-clearpath', duration);
+        this.game.trigger('btnTimer-cleararea', duration);
         this.game.trigger('cardActivate', 'increment-pools');
         inc.island.modifyPoolAmount('wood', 1);
         return 'you pick up a stick, big whoop, wanna fight about it?';
