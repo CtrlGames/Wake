@@ -125,8 +125,7 @@ Room.prototype = {
   },
 
   addExit(discriptor) {
-    discriptor.accessor = discriptor.accessor || new RegExp(discriptor.key, 'i');
-    this.exits[discriptor.key] = discriptor;
+    this.exits[discriptor.key || discriptor.file] = discriptor;
   },
 
   takeItem(item) {
@@ -141,10 +140,13 @@ Room.prototype = {
 
   getDescription(){
     var ret = [this.description];
+    var exitDescriptions = this.exitList.filter(e => !!this.exits[e].description).map(e => this.exits[e].description);
     ret = ret.concat(this.itemList.map(x=>this.items[x].description)).join(' ');
-    ret += '<div class="exits">You can go: ';
-    ret += this.exitList.map(x=>this.exits[x].description).join(', ');
-    ret += '</div>';
+    if (exitDescriptions.length){
+      ret += '<div class="exits">You can go: ';
+      ret += exitDescriptions.join(', ');
+      ret += '</div>';
+    }
     return ret;
   }
 

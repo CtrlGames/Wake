@@ -4,6 +4,8 @@ import inc from 'INCInstances.js';
 const downBeach = tba.addRoom({
   key: 'downBeach',
   name: 'Down Beach',
+  accessor: /down.*beach|down/,
+  exitDescription: 'down the beach',
   actions: [
     {
       command: /catch fish/,
@@ -26,7 +28,7 @@ const downBeach = tba.addRoom({
         }
         return 'You have no fishing pole.';
       }
-    },
+    }
   ]
 });
 
@@ -93,116 +95,8 @@ tba.loadItem('downBeach', {
   ]
 });
 
-const upBeach = tba.addRoom({
-  key: 'upBeach',
-  name: 'Up Beach',
-  description: 'The shipwreck is here.',
-  enterInit(){
-    this.trigger('cardActivate', 'location-actions');
-  },
-  actions: [
-    {
-      locationButton: true,
-      text: 'Search shipwreck',
-    },
-  ]
-});
-
-upBeach.addItem({
-  key: 'shipwreck',
-  accessor: /ship|wreck/,
-  detail: 'You can probably find some things in here if you <b>search</b> it.',
-  hitWithRock(){
-    return 'There is a satisfying clang.';
-  },
-  actions: [
-    {command: /search/, method(){
-      const duration = 1000;
-      if (this.searchTimer) return "You can't do it...";
-      this.searchTimer = setTimeout(()=> delete this.searchTimer, duration);
-      this.game.trigger('btnTimer-searchshipwreck', duration);
-      var find = Math.random();
-      if (find < 0.3) {
-        this.game.trigger('cardActivate', 'increment-pools');
-        inc.island.modifyPoolAmount('string', 1);
-        return 'You find some string.';
-      }
-      return "you don't find anything.";
-    }},
-  ]
-});
-
-const forest = tba.addRoom({
-  key: 'forest',
-  name: 'Forest Path',
-  description: 'There are small trees all around, the brush is too thick to continue.',
-  enterInit(){
-    this.trigger('cardActivate', 'location-actions');
-  },
-  actions: [
-    {
-      command: /clear (area|brush)/,
-      locationButton: true,
-      text: 'Clear area',
-      method(){
-        const duration = 5000;
-        if (this.clearTimeout) return 'You fail.';
-        this.clearTimeout = setTimeout(() => delete this.clearTimeout, duration);
-        this.game.trigger('btnTimer-cleararea', duration);
-        this.game.trigger('cardActivate', 'increment-pools');
-        inc.island.modifyPoolAmount('wood', 1);
-        return 'you pick up a stick, big whoop, wanna fight about it?';
-      }
-    }
-  ]
-});
-
-forest.addItem({
-  key: 'brush',
-  detail: "This will need to be cleared if you want to continue."
-});
-
 // Exits
+downBeach.addExit({ file: 'areas/upBeach.js' });
+downBeach.addExit({ file: 'areas/inland.js' });
 
-downBeach.addExit({
-  key: upBeach.key,
-  accessor: /up.*beach|up/,
-  room: upBeach,
-  description: 'up the beach'
-});
-
-downBeach.addExit({
-  key: forest.key,
-  accessor: /forest|inland|in/,
-  room: forest,
-  description: 'inland'
-});
-
-upBeach.addExit({
-  key: downBeach.key,
-  accessor: /down.*beach|down/,
-  room: downBeach,
-  description: 'down the beach'
-});
-
-upBeach.addExit({
-  key: forest.key,
-  accessor: /forest|inland|in/, 
-  room: forest,
-  description: 'inland'
-});
-
-
-forest.addExit({
-  key: downBeach.key,
-  accessor: /down.*beach|down/,
-  room: downBeach,
-  description: 'down the beach'
-});
-
-forest.addExit({
-  key: upBeach.key,
-  accessor: /up.*beach|up/,
-  room: upBeach,
-  description: 'up the beach'
-});
+export default downBeach;

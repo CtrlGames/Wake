@@ -12,8 +12,12 @@
     @import "sass/vars";
 
     wake-header
+
       h1
         display: inline-block
+        &:after
+          content: " "
+          display: inline-block
       btn
         display: none
 

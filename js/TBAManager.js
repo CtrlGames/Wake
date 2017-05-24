@@ -1,6 +1,5 @@
 import tba from 'TBAInstance.js';
 import { get as storageGet } from 'storage.js';
-import 'areas/first.js'; // load the first area
 
 var directionMap = {
   'n': 'north',
@@ -33,10 +32,14 @@ tba.addGlobalCommand({command: /^(go|g)\s(.*)/, method(){
   for (var key in this.currentRoom.exits) {
     if(this.currentRoom.exits.hasOwnProperty(key)) {
       if(this.currentRoom.exits[key].accessor.test(direction)) {
-        var roomDescription = this.enterRoom(this.currentRoom.exits[key].room);
-        if (~visitedRooms.indexOf(key)) return this.currentRoom.name;
-        visitedRooms.push(this.currentRoom.key);
-        return roomDescription;
+        var room = this.currentRoom.exits[key].room;
+        this.enterRoom(room).then(e => {
+          var command = this.regExpMatchs.command[0];
+          if (~visitedRooms.indexOf(room.key)) return tba.trigger('output', this.currentRoom.name, command);
+          visitedRooms.push(this.currentRoom.key);
+          tba.trigger('output', e, command);
+        });
+        return null;
       }
     }
   }
@@ -72,8 +75,10 @@ tba.addGlobalCommand({command: /^i$|inventory/, method(){
     : this.emptyInventory;
 }});
 
-var currentRoom = storageGet('currentLocation');
-tba.currentRoom = tba.rooms[currentRoom] || tba.rooms.downBeach;
-visitedRooms.push(tba.currentRoom.key);
+var currentRoom = storageGet('currentLocation') || 'downBeach';
+System.import(`areas/${currentRoom}.js`).then(d => {
+  tba.enterRoom(d.default);
+  visitedRooms.push(d.default.key);
+});
 
 export default tba;

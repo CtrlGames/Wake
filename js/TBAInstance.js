@@ -39,8 +39,11 @@ class modTba extends TBA {
     this.log('You wake up on a rough sand beach. Calm waves rush up beside you.');
   }
   enterRoom(room){
-    storage.set('currentLocation', room.key);
-    return super.enterRoom(room);
+    this.currentRoom = room;
+    return room.loadExits().then( () => {
+      storage.set('currentLocation', room.key);
+      return super.enterRoom(room);
+    });
   }
 }
 
@@ -61,6 +64,10 @@ class modRoom extends Room {
   takeItem(item){
     super.takeItem(item);
     saveItem(item.key, {location: 'inventory'});
+  }
+  loadExits(){
+    var promises = Object.keys(this.exits).map(file => System.import(file).then(mapExit.bind(this, this.exits[file])));
+    return Promise.all(promises);
   }
 }
 
@@ -104,6 +111,15 @@ function loadState(ob){
 function setState(key, val){
   this.state[key] = val;
   saveItem('state-'+this.key, this.state);
+}
+
+function mapExit(exit, data){
+  data = data.default;
+  exit.room = data;
+  exit.accessor = exit.accessor || data.accessor || new RegExp(data.key, 'i');
+  exit.description = exit.description || data.exitDescription;
+  exit.__loaded = true;
+  return exit;
 }
 
 export default tba;

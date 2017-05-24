@@ -37,7 +37,10 @@
     };
 
     Object.defineProperty(this, 'actions', {
-      get: () => this.tba.currentRoom.actions.filter(e => e.locationButton)
+      get(){ 
+        return this.tba.currentRoom && this.tba.currentRoom.actions?
+          this.tba.currentRoom.actions.filter(e => e.locationButton):[];
+      }
     });
 
     this.tba.on('cardActivate', (card) => {
@@ -49,9 +52,11 @@
 
     this.tba.on('roomChange', () => {
       var btns = this.root.querySelectorAll('btn');
-      btns[0].addEventListener("animationend", () => { 
-        this.update() ;
-      }, false);
+      if (btns.length) {
+        btns[0].addEventListener("animationend", () => { 
+          this.update();
+        }, false);
+      } else this.update();
       if(!prevent) Array.prototype.forEach.call(btns, e => e.className = "animated fadeOut");
       else prevent = false;
     });
