@@ -2,7 +2,14 @@ import * as storage from 'storage.js';
 import { default as TBA, Room, Item } from 'lib/TBAEngine.js';
 
 var tbaStorage = storage.get('tbaStorage') || {};
-var itemsForRoom = {};
+var itemLocationMap = tbaStorage.items || [];
+var objectStates = tbaStorage.state || {};
+
+// load inventory items
+itemLocationMap
+  .filter(e => e.location === 'inventory')
+  .forEach(e => System.import(e.file)
+  .then(e => tba.inventory[e.default.key] = e.default));
 
 class modTba extends TBA {
   constructor(){
@@ -20,21 +27,6 @@ class modTba extends TBA {
     if(descriptor.state) loadState(descriptor);
     return new modItem(descriptor, null, this);
   }
-  loadItem(location, descriptor){
-    var store = tbaStorage[descriptor.key];
-    if (store) {
-      location = store.location;
-      if (store.location === 'inventory') {
-        tba.inventory[descriptor.key] = tba.createItem(descriptor);
-      }
-    }
-
-    if (this.rooms[location]) this.rooms[location].addItem(descriptor);
-    else {
-      if(!itemsForRoom[location]) itemsForRoom[location] = [];
-      itemsForRoom[location].push(tba.createItem(descriptor));
-    }
-  }
   wakeUp(){
     this.log('You wake up on a rough sand beach. Calm waves rush up beside you.');
   }
@@ -50,20 +42,21 @@ class modTba extends TBA {
 class modRoom extends Room {
   constructor(...args){
     super(...args);
-    if (itemsForRoom[this.key]) {
-      for (var i = 0, l = itemsForRoom[this.key].length; i < l; i++) {
-        this.addItem(itemsForRoom[this.key][i]);
-      }
-    }
+    itemLocationMap.filter(e => e.location === this.key).forEach(e => {
+      System.import(e.file).then(e => this.addItem(e.default));
+    });
   }
   addItem(descriptor){
     var item = descriptor instanceof Item? descriptor:new modItem(descriptor, this, this.game);
     super.addItem(item);
     if(item.state) loadState(item);
   }
+  loadItem(descriptor){
+    if(!itemLocationMap.find(e => e.key === descriptor.key)) this.addItem(descriptor);
+  }
   takeItem(item){
     super.takeItem(item);
-    saveItem(item.key, {location: 'inventory'});
+    saveItem(item, 'inventory');
   }
   loadExits(){
     var promises = Object.keys(this.exits).map(file => System.import(file).then(mapExit.bind(this, this.exits[file])));
@@ -77,7 +70,7 @@ class modItem extends Item {
   }
   drop(){
     super.drop();
-    saveItem(this.key, {location: this.game.currentRoom.key});
+    saveItem(this, this.game.currentRoom.key);
   }
 }
 
@@ -96,21 +89,26 @@ function addTrigger(method, eventName){
   };
 }
 
-function saveItem(key, details){
-  var target = tbaStorage[key] || {};
-  tbaStorage[key] = Object.assign(target, details);
+function saveItem(item, location){
+  var locationDescriptor = itemLocationMap.find(e => e.key === item.key) || itemLocationMap[itemLocationMap.push({}) - 1];
+  locationDescriptor.file = `items/${item.key}.js`;
+  locationDescriptor.location = location;
+  locationDescriptor.key = item.key;
+  tbaStorage.items = itemLocationMap;
   storage.set('tbaStorage', tbaStorage);
 }
 
 function loadState(ob){
-  var state = tbaStorage['state-'+ob.key];
+  var state = objectStates[ob.key];
   if (state) ob.state = state;
   ob.setState = setState;
 }
 
 function setState(key, val){
   this.state[key] = val;
-  saveItem('state-'+this.key, this.state);
+  objectStates[this.key] = this.state;
+  tbaStorage.state = objectStates;
+  storage.set('tbaStorage', tbaStorage);
 }
 
 function mapExit(exit, data){
