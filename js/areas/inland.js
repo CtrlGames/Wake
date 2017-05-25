@@ -31,6 +31,7 @@ const inland = tba.addRoom({
         inc.island.modifyPoolAmount('wood', 1);
         if (this.state.blocked && inc.island.getPoolAmount('wood') > 1){
           addForestExit();
+          inland.loadExits();
           this.setState('blocked', false);
           return 'The path is much clearer now.';
         }
@@ -56,7 +57,6 @@ if (!inland.state.blocked) addForestExit();
 
 function addForestExit() {
   inland.addExit({ file: 'areas/forest.js' });
-  inland.loadExits();
 }
 
 export default inland;
