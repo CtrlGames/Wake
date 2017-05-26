@@ -6,9 +6,9 @@
   "scripts": {
     "build:tags": "riot tags/ dist/tags.js --type babel",
     "build:tags:watch": "npm run build:tags -- -w",
-    "build:js": "babel js -d dist/js/",
+    "build:js": "babel js -d dist/js/ --source-maps",
     "build:js:watch": "npm run build:js -- -w",
-    "build:sass": "node-sass sass/base.sass dist/base.css",
+    "build:sass": "node-sass sass/base.sass dist/base.css --source-map dist/base.css.map",
     "build:sass:watch": "node-sass sass/base.sass dist/base.css --watch",
     "build": "npm run build:js & npm run build:tags & npm run build:sass",
     "build:watch": "npm run build:js:watch & npm run build:tags:watch & npm run build:sass:watch",
