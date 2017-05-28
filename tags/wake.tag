@@ -18,8 +18,10 @@
       display: flex
       flex-direction: column
       flex: 1 1 auto
-      padding: 5px
       width: 100%
+      max-width: 1100px
+      padding: 5px
+      margin: 0 auto
 
     .wake
 

@@ -23,7 +23,7 @@ const downBeach = tba.addRoom({
           if (!this.items['tide pool'].state.hasRock && Math.random() > 0.5) {
             var fishSize = Math.floor(Math.random()*3);
             var fishSizeChart = ['small ', '', 'big '];
-            inc.island.modifyPoolAmount('food', fishSize);
+            inc.island.modifyPoolAmount('food', fishSize + 1);
             return `You Catch a ${fishSizeChart[fishSize]}fish.`;
           }
           else return 'You don\'t catch anything';
