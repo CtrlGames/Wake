@@ -29,7 +29,6 @@
     this.mixin('tba');
     this.mixin('storage');
 
-    var prevent = false;
     var cardActive = !!(this.storage.get('activeCards') && ~this.storage.get('activeCards').indexOf('location-actions'));
 
     this.updateTba = function(text){
@@ -45,7 +44,6 @@
 
     this.tba.on('cardActivate', (card) => {
       if (card === 'location-actions' && !cardActive) {
-        prevent = true;
         cardActive = true;
       }
     });
@@ -57,8 +55,7 @@
           this.update();
         }, false);
       } else this.update();
-      if(!prevent) Array.prototype.forEach.call(btns, e => e.className = "animated fadeOut");
-      else prevent = false;
+      Array.prototype.forEach.call(btns, e => e.className = "animated fadeOut");
     });
 
   </script>
