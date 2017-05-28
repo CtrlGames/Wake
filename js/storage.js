@@ -1,16 +1,20 @@
+var storage = window.localStorage.getItem('cache');
+if (!storage) storage = {};
+else {
+  storage = JSON.parse(atob(storage));
+}
+
 export function get(key){
-  var val = window.localStorage.getItem(key);
-  //val = atob(val);
-  try {
-    val = JSON.parse(val);
-  } catch(e){/*swallow*/}
-  return val;
+  return storage[key];
 }
 
 export function set(key, val){
-  if(typeof val !== 'string') val = JSON.stringify(val);
-  //window.localStorage.setItem(key, btoa(val));
-  window.localStorage.setItem(key, val);
+  storage[key] = val;
+  save();
+}
+
+export function save() {
+  window.localStorage.setItem('cache', btoa(JSON.stringify(storage)));
 }
 
 export function clear(){
