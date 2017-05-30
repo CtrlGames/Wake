@@ -50,9 +50,10 @@ class modRoom extends Room {
     var item = descriptor instanceof Item? descriptor:new modItem(descriptor, this, this.game);
     super.addItem(item);
     if(item.state) loadState(item);
+    return item;
   }
   loadItem(descriptor){
-    if(!itemLocationMap.find(e => e.key === descriptor.key)) this.addItem(descriptor);
+    if(!itemLocationMap.find(e => e.key === descriptor.key)) saveItem(this.addItem(descriptor), this.key);
   }
   takeItem(item){
     super.takeItem(item);
