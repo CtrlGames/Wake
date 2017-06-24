@@ -58,6 +58,8 @@ function saveIncValues () {
   storage.set('incStorage', storageOb);
 }
 
+document.addEventListener('tick', (e, context) => queues.trigger('tick', context));
+
 queues.island.begin(2000);
 
 export default queues;

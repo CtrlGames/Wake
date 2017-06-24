@@ -24,7 +24,6 @@ const downBeach = tba.addRoom({
             var fishSize = Math.floor(Math.random()*3);
             var fishSizeChart = ['small ', '', 'big '];
             inc.island.modifyPoolAmount('food', fishSize + 1);
-            addFirstMoocher(this.game);
             return `You Catch a ${fishSizeChart[fishSize]}fish.`;
           }
           else return 'You don\'t catch anything';
@@ -60,15 +59,5 @@ downBeach.loadItem(rock);
 // Exits
 downBeach.addExit({ file: 'areas/upBeach.js' });
 downBeach.addExit({ file: 'areas/inland.js' });
-
-function addFirstMoocher (game) {
-  Promise.all([
-    System.import('items/moocher.js'),
-    System.import('areas/forest.js')
-  ])
-  .then( e => {
-    game.rooms.forest.loadItem(e[0].default);
-  });
-}
 
 export default downBeach;

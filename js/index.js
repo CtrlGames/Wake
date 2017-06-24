@@ -3,6 +3,7 @@ import inc from 'INCInstances.js';
 import * as storage from 'storage.js';
 import controls  from 'crafts.js';
 import incPools from 'incPools.js';
+import * as gameTick from 'gameTick.js';
 
 riot.mixin('tba', {tba:tba});
 riot.mixin('inc', {inc:inc});
@@ -19,5 +20,8 @@ riot.mixin('scrollinit', {
     }
   }
 });
+
+// game tick
+gameTick.start();
 
 riot.mount('*');

@@ -20,15 +20,12 @@ class modTba extends TBA {
     if(descriptor.state) loadState(this.rooms[descriptor.key]);
     return this.rooms[descriptor.key];
   }
-  log(output, className){
-    tba.trigger('log', {output, className});
-  }
   createItem(descriptor){
     if(descriptor.state) loadState(descriptor);
     return new modItem(descriptor, null, this);
   }
-  wakeUp(){
-    this.log('You wake up on a rough sand beach. Calm waves rush up beside you.');
+  log(output, className){
+    tba.trigger('log', {output, className});
   }
   enterRoom(room){
     this.currentRoom = room;
@@ -36,6 +33,14 @@ class modTba extends TBA {
       storage.set('currentLocation', room.key);
       return super.enterRoom(room);
     });
+  }
+  findItem(itemKey){
+    for (var i = 0; i < itemLocationMap.length; i++) {
+      if (itemLocationMap[i].key === itemKey ) return  itemLocationMap[i];
+    }
+  }
+  wakeUp(){
+    this.log('You wake up on a rough sand beach. Calm waves rush up beside you.');
   }
 }
 
@@ -58,6 +63,14 @@ class modRoom extends Room {
   takeItem(item){
     super.takeItem(item);
     saveItem(item, 'inventory');
+  }
+  removeItem(item){
+    super.removeItem(item);
+    saveRemoveItem(item);
+  }
+  moveItem(item, toRoom){
+    super.moveItem(item, toRoom);
+    saveItem(item, toRoom.key);
   }
   loadExits(){
     var promises = Object.keys(this.exits).map(file => System.import(file).then(mapExit.bind(this, this.exits[file])));
@@ -96,6 +109,11 @@ function saveItem(item, location){
   locationDescriptor.location = location;
   locationDescriptor.key = item.key;
   tbaStorage.items = itemLocationMap;
+  storage.set('tbaStorage', tbaStorage);
+}
+
+function saveRemoveItem (item) {
+  tbaStorage.items.splice(tbaStorage.items.findIndex(e => e.key === item.key), 1);
   storage.set('tbaStorage', tbaStorage);
 }
 
