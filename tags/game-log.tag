@@ -1,6 +1,6 @@
 <game-log>
   <div class="gameLog__inputControls">
-    <input type=text name=inputText class=gameLog__inputText onkeyup={ inputkeyup }>
+    <input type=text name=inputText class=gameLog__inputText onkeyup={ inputkeyup } onkeydown={ inputkeydown }>
     <button name=inputButton class=gameLog__inputButton onclick={ logInput }>&crarr;</button>
   </div>
   <div class=gameLog__log name=gameLog>
@@ -24,7 +24,6 @@
         opacity: 1
         transform: none
 
-
     game-log
       display: flex
       flex-direction: column
@@ -43,7 +42,10 @@
         flex: 1 1 auto
         margin: 2px 0 2px 2px
         padding: 3px 10px
-        background: $shade5 
+        background: $shade5
+
+        &::selection
+          background-color: $shade4
 
       &__inputButton
         background: none
@@ -77,11 +79,32 @@
     this.mixin('tba');
     this.mixin('scrollinit');
     this.logEntries = [];
+    this.commandEntries = [];
 
+    var commandSearchIndex = 0;
+
+    document.onkeydown = function(){
+      this.inputText.value = '';
+      this.inputText.focus();
+    }.bind(this);
 
     this.inputkeyup = function(e){
       if(e.key == "Enter") this.logInput();
+      if(e.key == "ArrowUp" && this.commandEntries[commandSearchIndex+1])
+        this.selectText(this.commandEntries[++commandSearchIndex]);
+      if(e.key == "ArrowDown" && this.commandEntries[commandSearchIndex-1])
+        this.selectText(this.commandEntries[--commandSearchIndex]);
     };
+
+    this.selectText = function(text) {
+      this.inputText.value = text;
+      this.inputText.select();
+    }
+
+    this.inputkeydown = function(e){
+      e.stopPropagation();
+      return true;
+    }
 
     this.logInput = function(){
       this.tba.input(this.inputText.value);
@@ -91,12 +114,16 @@
     this.log = function(logOb) {
       if(typeof logOb === "string") logOb = {output: logOb};
       if(logOb.output) this.logEntries.unshift(logOb);
+      if(logOb.command){
+        this.commandEntries.unshift(logOb.command);
+        this.inputText.value = logOb.command;
+        this.inputText.select();
+      }
       return this.update; // returned so you can manually update the log if need be.
     };
 
     this.on('mount', () => this.inputText.focus());
     this.tba.on('log', lobOb => this.log(lobOb)());
-    this.tba.on('output', (output, input) => this.log({command: input, output})());
 
     this.scrollinit.vertical(this.gameLog);
 
