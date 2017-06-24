@@ -36,7 +36,7 @@
     this.mixin('storage');
     this.mixin('incPools');
 
-    var groupOrder = ['basic', 'tools', 'buildings'];
+    var groupOrder = ['basic', 'tools', 'workers', 'buildings'];
 
     this.group = (queue) => {
       var ret = [];
@@ -54,5 +54,6 @@
     };
 
     this.inc.on('poolModified', () => this.update() );
+    this.inc.on('tick', () => this.update() );
   </script>
 </increment-pools>

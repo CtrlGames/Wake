@@ -12,6 +12,11 @@ const pools = {
   'hut': {
     requirements: { wood: 2 },
     details: { group: 'buildings' },
+  },
+// workers
+  'Moochers': {
+    details: {group: 'workers'},
+    increments: {food: -1},
   }
 };
 

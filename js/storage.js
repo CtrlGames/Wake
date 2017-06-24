@@ -1,4 +1,4 @@
-var storage = window.localStorage.getItem('cache');
+window.storage = window.localStorage.getItem('cache');
 if (!storage) storage = {};
 else {
   storage = JSON.parse(atob(storage));

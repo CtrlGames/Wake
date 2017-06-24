@@ -130,12 +130,21 @@ Room.prototype = {
 
   takeItem(item) {
     this.game.inventory[item.key] = item;
-    delete item.room;
-    this.removeItem(item.key);
+    this.removeItem(item);
   },
 
-  removeItem(key) {
-    delete this.items[key];
+  removeItem(item) {
+    if(typeof item === 'string') item = this.items[item]
+    if (item.cleanup) item.cleanup();
+    delete item.room;
+    delete this.items[item.key];
+  },
+
+  moveItem(item, toRoom){
+    delete item.room.items[item.key];
+    delete item.room;
+    toRoom.items[item.key] = item;
+    item.room = toRoom;
   },
 
   getDescription(){
@@ -160,7 +169,7 @@ Object.defineProperty(Room.prototype, 'exitList', {
   get(){ return Object.keys(this.exits); }
 });
 
-// Object construction --------------
+// Object construction
 
 function Item(descriptor, room, game) {
   Object.assign(this, descriptor);
