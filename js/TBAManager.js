@@ -36,9 +36,9 @@ tba.addGlobalCommand({command: /^(go|g)\s(.*)/, method(){
         var room = this.currentRoom.exits[key].room;
         this.enterRoom(room).then(e => {
           var command = this.regExpMatchs.command[0];
-          if (~visitedRooms.indexOf(room.key)) return tba.trigger('output', this.currentRoom.name, command);
+          if (~visitedRooms.indexOf(room.key)) return tba.trigger('log', {output: this.currentRoom.name, command});
           visitedRooms.push(this.currentRoom.key);
-          tba.trigger('output', e, command);
+          tba.trigger('log', {output: e, command});
         });
         return null;
       }
