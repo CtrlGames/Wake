@@ -1,7 +1,7 @@
 import tba from 'TBAManager.js'; // setup the TBA
 import inc from 'INCInstances.js';
 import * as storage from 'storage.js';
-import controls  from 'gameControls.js';
+import controls  from 'crafts.js';
 import incPools from 'incPools.js';
 
 riot.mixin('tba', {tba:tba});

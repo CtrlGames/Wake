@@ -67,10 +67,16 @@
           font-weight: bold
           color: $shade3
 
-        .exits
-          padding-top: 5px
+        .exits, .item
+          font-size: 0.9em
+          &:first-child
+            padding-top: 5px
+
+        .small
           font-size: 0.9em
 
+        .indent
+          padding-left: 1em
   </style>
 
   <script type=babel>

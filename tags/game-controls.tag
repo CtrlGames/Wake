@@ -5,7 +5,7 @@
     </yield>
     <yield to=content>
       <div each={ group, buttons in parent.availableControls } name={ group }>
-        <btn each={ buttons } click={ parent.parent.parent.clickHandle.bind(this, method) } disable={ parent.parent.parent.checkRequirements(name) }>{ name }</btn>
+        <btn each={ buttons } click={ parent.parent.parent.clickHandle.bind(this, name) } disable={ parent.parent.parent.checkRequirements(name) }>{ name }</btn>
       </div>
     </yield>
   </tabs>
@@ -35,9 +35,8 @@
     var active = false;
     const foundButtons = this.storage.get('foundButtons') || [];
 
-    this.clickHandle = function(method){
-      if (method) method();
-      this.update();
+    this.clickHandle = function(name){
+      this.tba.input(`make ${name}`);
     };
 
     this.checkRequirements = name => {
