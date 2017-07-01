@@ -1,4 +1,5 @@
 import tba from 'TBAInstance.js';
+import crafts from 'crafts.js';
 import { get as storageGet } from 'storage.js';
 
 var directionMap = {
@@ -69,6 +70,12 @@ tba.addGlobalCommand({command: /^drop\s?(.*)/, method(){
   }
 }});
 
+tba.addGlobalCommand({command: /^make\s(.*)/, method(){
+  var query = this.regExpMatchs.command[1];
+  var craft = findCraftInName(query);
+  return craft.method();
+}});
+
 tba.addGlobalCommand({command: /^i$|inventory/, method(){
   return this.inventoryList.length? 
     this.inventoryList.map(e=>this.inventory[e].name).join('\n')
@@ -80,5 +87,14 @@ System.import(`areas/${currentRoom}.js`).then(d => {
   tba.enterRoom(d.default);
   visitedRooms.push(d.default.key);
 });
+
+function findCraftInName (name){
+  for (let key in crafts) {
+    if (!crafts.hasOwnProperty) continue;
+    for (let i = 0; i < crafts[key].length; i++){
+      if (!!~name.indexOf(crafts[key][i].name)) return crafts[key][i]
+    }
+  }
+}
 
 export default tba;
