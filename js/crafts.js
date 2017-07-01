@@ -6,6 +6,7 @@ function checkReq(name, config) {
   if(!config.amount) config.amount = 1;
   if(!config.pass) config.pass = `You are able to create ${name}.`;
 
+  if (!inc.island.pools[name]) inc.island.modifyPoolAmount(name, 0, pools[name]);
   var req = inc.island.pools[name].checkRequirements(config.amount);
   if (req.success) {
     if (typeof config.pass === 'function') return config.pass();

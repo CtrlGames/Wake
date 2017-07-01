@@ -78,7 +78,7 @@ var poolPrototype = {
     if (!Object.keys(unmetReq).length && pay) {
       Object.keys(this.requirements).forEach(e => this.queue.pools[e].modifyPoolAmount(-(this.requirements[e] * n)));
     }
-    return !Object.keys(unmetReq).length ? {success: true} : {succeess: false, unmetRequirements: unmetReq};
+    return !Object.keys(unmetReq).length ? {success: true} : {success: false, unmetRequirements: unmetReq};
   },
 
   checkMinandMax: function(n){

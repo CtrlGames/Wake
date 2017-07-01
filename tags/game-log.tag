@@ -119,17 +119,21 @@
 
     this.log = function(logOb) {
       if(typeof logOb === "string") logOb = {output: logOb};
-      if(logOb.output) this.logEntries.unshift(logOb);
-      if(logOb.command){
-        this.commandEntries.unshift(logOb.command);
-        this.inputText.value = logOb.command;
-        this.inputText.select();
+      if(logOb.output) {
+        this.logEntries.unshift(logOb);
+        if(logOb.command){
+          if(this.commandEntries[0] != logOb.command) this.commandEntries.unshift(logOb.command);
+          if(this.commandEntries.length > 10) this.commandEntries.pop();
+          this.inputText.value = logOb.command;
+          this.inputText.select();
+        }
       }
       return this.update; // returned so you can manually update the log if need be.
     };
 
     this.on('mount', () => this.inputText.focus());
     this.tba.on('log', lobOb => this.log(lobOb)());
+    this.tba.on('output', (output, input) => this.log({command: input, output})());
 
     this.scrollinit.vertical(this.gameLog);
 
