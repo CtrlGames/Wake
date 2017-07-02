@@ -42,7 +42,7 @@
         a
           padding: 5px 0
           &:hover
-            color: $shade1
+            color: $shade0
   </style>
 
   <script type=babel>

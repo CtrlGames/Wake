@@ -5,7 +5,7 @@
     </yield>
     <yield to=content>
       <div each={ group, buttons in parent.availableControls } name={ group }>
-        <btn each={ buttons } click={ parent.parent.parent.clickHandle.bind(this, name) } disable={ parent.parent.parent.checkRequirements(name) }>{ name }</btn>
+        <btn each={ buttons } click={ parent.parent.parent.clickHandle.bind(this, name) } disable={ parent.parent.parent.checkRequirements(name) } tooltip={ parent.parent.parent.getTooltip(name) }>{ name }</btn>
       </div>
     </yield>
   </tabs>
@@ -35,8 +35,15 @@
     var active = false;
     const foundButtons = this.storage.get('foundButtons') || [];
 
-    this.clickHandle = function(name){
-      this.tba.input(`make ${name}`);
+    this.clickHandle = (name) => this.tba.input(`make ${name}`);
+
+    this.getTooltip = name => {
+      var ret = '';
+      var reqs = this.incPools[name].requirements;
+      for (let key in reqs) {
+        ret += `${ret.length? '<br>':''}${key}: ${reqs[key]}`;
+      }
+      return ret;
     };
 
     this.checkRequirements = name => {
