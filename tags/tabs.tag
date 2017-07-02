@@ -24,7 +24,6 @@
         transform: rotateZ(-90deg)
         user-select: none
         white-space: nowrap
-        z-index: 1
 
         a
           color: inherit

@@ -3,18 +3,21 @@
     <yield />
     <span name="pb" class="progressBackground"></span>
   </button>
+  <tooltip if={ showTooltip }><raw output={ parent.opts.tooltip } /></tooltip>
 
   <style type=sass>
     @import 'sass/vars';
 
     @keyframes timeout
-        from 
-          width: 100%
-        to 
-          width: 0
+      from 
+        width: 100%
+      to 
+        width: 0
 
     btn
       +button-base
+      position: relative
+      overflow: visible
       padding: 0
 
       button
@@ -35,6 +38,7 @@
   <script type="babel">
     this.mixin('tba');
     this.click = opts.click;
+    this.showTooltip = opts.tooltip && !!opts.tooltip.length;
 
     if (this.opts.timerName){
       this.tba.on(`btnTimer-${this.opts.timerName}`, (timeout=3000) => {
