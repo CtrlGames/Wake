@@ -3,6 +3,6 @@
     <label>{ name }</lablel>: <span>{ pool.amount }</span>
   </div>
 
-  <script type="babel">
+  <script>
   </script>
 </pool>

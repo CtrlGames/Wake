@@ -1,11 +1,11 @@
 <game-controls>
   <tabs>
     <yield to=tabs>
-      <a each={ group, buttons in parent.availableControls } for={ group }>{ group }</a>
+      <a each={ buttons, group in parent.availableControls } for={ group }>{ group }</a>
     </yield>
     <yield to=content>
-      <div each={ group, buttons in parent.availableControls } name={ group }>
-        <btn each={ buttons } click={ parent.parent.parent.clickHandle.bind(this, name) } disable={ parent.parent.parent.checkRequirements(name) } tooltip={ parent.parent.parent.getTooltip(name) }>{ name }</btn>
+      <div each={ buttons, group in parent.availableControls } name={ group }>
+        <btn each={ buttons } clickhandle={ parent.parent.parent.clickHandle.bind(this, name) } disable={ parent.parent.parent.checkRequirements(name) } tooltip={ parent.parent.parent.getTooltip(name) }>{ name }</btn>
       </div>
     </yield>
   </tabs>
@@ -25,8 +25,9 @@
 
   </style>
 
-  <script type="babel">
+  <script>
     this.mixin('inc');
+    this.mixin('tba');
     this.mixin('controls');
     this.mixin('storage');
     this.mixin('incPools');

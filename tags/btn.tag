@@ -1,7 +1,7 @@
 <btn>
-  <button onclick={ click } disabled={ opts.disable === false }>
+  <button onclick={ clickHandle } disabled={ opts.disable === false }>
     <yield />
-    <span name="pb" class="progressBackground"></span>
+    <span ref="pb" class="progressBackground"></span>
   </button>
   <tooltip if={ showTooltip }><raw output={ parent.opts.tooltip } /></tooltip>
 
@@ -20,6 +20,9 @@
       overflow: visible
       padding: 0
 
+      &:hover > tooltip.card
+        display: block !important
+
       button
         position: relative
         background: transparent
@@ -35,21 +38,26 @@
           animation-timing-function: cubic-bezier(0.40, 0, 1, 0.60)
   </style>
 
-  <script type="babel">
+  <script>
     this.mixin('tba');
-    this.click = opts.click;
+    this.clickHandle = opts.clickhandle;
     this.showTooltip = opts.tooltip && !!opts.tooltip.length;
+
+    console.log(this.showTooltip)
 
     if (this.opts.timerName){
       this.tba.on(`btnTimer-${this.opts.timerName}`, (timeout=3000) => {
-        this.pb.style.animationDuration = `${timeout}ms`;
-        this.pb.style.animationName = 'timeout';
+        this.refs.pb.style.animationDuration = `${timeout}ms`;
+        this.refs.pb.style.animationName = 'timeout';
       });
     }
 
-    this.pb.addEventListener("animationend", () => { 
-      this.pb.style.animationName = 'none';
-    }, false);
+
+    this.on('mount', () => {
+      this.refs.pb.addEventListener("animationend", () => { 
+        this.refs.pb.style.animationName = 'none';
+      }, false);
+    });
 
     this.on('unmount', () => {
       this.tba.off(`btnTimer-${this.opts.timerName}`);

@@ -6,9 +6,6 @@
   <style type=sass>
     @import 'sass/vars';
 
-    *:hover > tooltip.card
-      display: block !important
-
     tooltip.card
       position: absolute
       display: none

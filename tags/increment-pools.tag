@@ -5,8 +5,8 @@
     </yield>
     <yield to=content>
       <div each={ area, queue in parent.inc } name={ area }>
-        <div class=group each={ parent.parent.group(queue) }>
-          <pool each={ name, pool in pools } />
+        <div class=group each={ parent.parent.group(area) }>
+          <pool each={ pool, name in pools } />
         </div>
       </div>
     </yield>
@@ -31,7 +31,7 @@
 
   </style>
 
-  <script type="babel">
+  <script>
     this.mixin('inc');
     this.mixin('storage');
     this.mixin('incPools');

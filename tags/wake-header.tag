@@ -1,8 +1,8 @@
 <wake-header>
   <header class={ dead:opts.dead }>
-    <btn click={ wakeUp }>Wake Up</btn>
-    <h1 id="locationName" class="animated fadeIn">{ name }</h1>
-    <small id="hintElm" class="animated fadeIn" if={ hint.length }>{ hint }</small>
+    <btn clickHandle={ wakeUp }>Wake Up</btn>
+    <h1 id="locationName" ref=locationName class="animated fadeIn">{ name }</h1>
+    <small id="hintElm" ref="hintElm" class="animated fadeIn" if={ hint.length }>{ hint }</small>
     <nav class="menu">
       <a onclick={ reset }>reset</a>
     </nav>
@@ -45,7 +45,7 @@
             color: $shade0
   </style>
 
-  <script type=babel>
+  <script>
     var hint = '';
     var hintTimeout;
     var loaded = false;
@@ -65,16 +65,13 @@
       this.tba.trigger('cardActivate', 'game-log');
     };
 
-    this.clearHint = () => {
-      this.hintElm.classList.add('fadeOut');
+    this.reset = function(){
+      this.storage.clear();
     };
 
-    this.hintElm.addEventListener("animationend", () => { 
-      if (this.hintElm.classList.contains('fadeOut')) {
-        this.hintElm.classList.remove('fadeOut');
-        this.hint = '';
-      }
-    });
+    this.clearHint = () => {
+      this.refs.hintElm.classList.add('fadeOut');
+    };
 
     this.tba.on('hint', (hint, timeout=8000) => {
       this.hint = hint;
@@ -85,16 +82,16 @@
     var locationAnimationEvent = () => {
       this.name = this.tba.currentRoom.name;
       this.update();
-      this.locationName.classList.remove("fadeOut");
-      this.locationName.classList.add("fadeIn");
-      this.locationName.removeEventListener('animationend', locationAnimationEvent, false);
+      this.refs.locationName.classList.remove("fadeOut");
+      this.refs.locationName.classList.add("fadeIn");
+      this.refs.locationName.removeEventListener('animationend', locationAnimationEvent, false);
     };
 
     this.tba.on('roomChange', () => {
       if (loaded) {
-        this.locationName.addEventListener("animationend", locationAnimationEvent, false);
-        this.locationName.classList.remove("fadeIn");
-        this.locationName.classList.add("fadeOut");
+        this.refs.locationName.addEventListener("animationend", locationAnimationEvent, false);
+        this.refs.locationName.classList.remove("fadeIn");
+        this.refs.locationName.classList.add("fadeOut");
       } else {
         this.name = this.tba.currentRoom.name;
         this.update();
@@ -102,8 +99,5 @@
       }
     });
 
-    this.reset = function(){
-      this.storage.clear();
-    };
   </script>
 </wake-header>

@@ -1,10 +1,10 @@
 {
-  "name": "riotseed",
+  "name": "Wake",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:tags": "riot tags/ dist/tags.js --type babel",
+    "build:tags": "riot tags/ dist/tags.js --type es6",
     "build:tags:watch": "npm run build:tags -- -w",
     "build:js": "babel js -d dist/js/ --source-maps",
     "build:js:watch": "npm run build:js -- -w",
@@ -25,7 +25,7 @@
     "eslint-plugin-riot": "^0.1.6",
     "node-sass": "^3.11.2",
     "perfect-scrollbar": "^0.6.14",
-    "riot": "^2.6.4",
+    "riot": "^3.6.1",
     "systemjs": "^0.19.40"
   },
   "babel": {

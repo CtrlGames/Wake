@@ -1,8 +1,8 @@
 <tabs>
-  <div name=tabs class=tabs__tabs onclick={ selectTab }>
+  <div ref=tabs class=tabs__tabs onclick={ selectTab }>
     <yield from=tabs />
   </div>
-  <div name=tabContent class="tabs__tabContent animated fadeIn">
+  <div ref=tabContent class="tabs__tabContent animated fadeIn">
     <yield from=content />
   </div>
 
@@ -73,39 +73,39 @@
           
   </style>
 
-  <script type=babel>
+  <script>
 
     this.selectTab = function(e){
       if(!e.target.getAttribute('for') || e.target.classList.contains('selected')) return;
       this.deselectAll(() => {
-        this.tabContent.querySelector(`[name=${e.target.getAttribute('for')}]`).classList.add('selected');
+        this.refs.tabContent.querySelector(`[name=${e.target.getAttribute('for')}]`).classList.add('selected');
       });
       e.target.classList.add('selected');
     };
 
     this.deselectAll = function(callback) {
-      this.tabContent.callback = callback;
-      Array.prototype.forEach.call(this.tabs.querySelectorAll('.selected'), e => e.classList.remove('selected'));
-      this.tabContent.classList.add('fadeOut');
+      this.refs.tabContent.callback = callback;
+      Array.prototype.forEach.call(this.refs.tabs.querySelectorAll('.selected'), e => e.classList.remove('selected'));
+      this.refs.tabContent.classList.add('fadeOut');
     };
 
-    this.tabContent.addEventListener("animationend", () => { 
-      if (this.tabContent.classList.contains('fadeOut')) {
-        Array.prototype.forEach.call(this.tabContent.querySelectorAll('.selected'), e => e.classList.remove('selected'));
-        if(this.tabContent.callback) this.tabContent.callback();
-        this.tabContent.classList.remove('fadeOut');
-      }
-    });
-
     this.noneSelected = function(){
-      return (!this.tabs.querySelectorAll('.selected').length);
+      return (!this.refs.tabs.querySelectorAll('.selected').length);
     };
 
     this.on('mount', () => {
-      if(this.tabs.children.length && this.noneSelected()){
-        this.tabs.querySelector('a').classList.add('selected');
-        this.tabContent.querySelector('div').classList.add('selected');
+      if(this.refs.tabs.children.length && this.noneSelected()){
+        this.refs.tabs.querySelector('a').classList.add('selected');
+        this.refs.tabContent.querySelector('div').classList.add('selected');
       }
+
+      this.refs.tabContent.addEventListener("animationend", () => { 
+        if (this.refs.tabContent.classList.contains('fadeOut')) {
+          Array.prototype.forEach.call(this.refs.tabContent.querySelectorAll('.selected'), e => e.classList.remove('selected'));
+          if(this.refs.tabContent.callback) this.refs.tabContent.callback();
+          this.refs.tabContent.classList.remove('fadeOut');
+        }
+      });
     });
   </script>
   

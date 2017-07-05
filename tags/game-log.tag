@@ -1,9 +1,9 @@
 <game-log>
   <div class="gameLog__inputControls">
-    <input type=text name=inputText class=gameLog__inputText onkeyup={ inputkeyup } onkeydown={ inputkeydown }>
-    <button name=inputButton class=gameLog__inputButton onclick={ logInput }>&crarr;</button>
+    <input type=text ref=inputText class=gameLog__inputText onkeyup={ inputkeyup } onkeydown={ inputkeydown }>
+    <button ref=inputButton class=gameLog__inputButton onclick={ logInput }>&crarr;</button>
   </div>
-  <div class=gameLog__log name=gameLog>
+  <div class=gameLog__log ref=gameLog>
     <div class="gameLog__logEntry animated" each={ logEntries }>
       <div class="command" if={ command }>> { command } </div>
       <raw class={ "output " + className } output={ output } />
@@ -81,7 +81,7 @@
           padding-left: 1em
   </style>
 
-  <script type=babel>
+  <script>
     this.mixin('tba');
     this.mixin('scrollinit');
     this.logEntries = [];
@@ -90,8 +90,8 @@
     var commandSearchIndex = 0;
 
     document.onkeydown = function(){
-      this.inputText.value = '';
-      this.inputText.focus();
+      this.refs.inputText.value = '';
+      this.refs.inputText.focus();
     }.bind(this);
 
     this.inputkeyup = function(e){
@@ -103,8 +103,8 @@
     };
 
     this.selectText = function(text) {
-      this.inputText.value = text;
-      this.inputText.select();
+      this.refs.inputText.value = text;
+      this.refs.inputText.select();
     }
 
     this.inputkeydown = function(e){
@@ -113,8 +113,8 @@
     }
 
     this.logInput = function(){
-      this.tba.input(this.inputText.value);
-      this.inputText.select();
+      this.tba.input(this.refs.inputText.value);
+      this.refs.inputText.select();
     };
 
     this.log = function(logOb) {
@@ -124,18 +124,20 @@
         if(logOb.command){
           if(this.commandEntries[0] != logOb.command) this.commandEntries.unshift(logOb.command);
           if(this.commandEntries.length > 10) this.commandEntries.pop();
-          this.inputText.value = logOb.command;
-          this.inputText.select();
+          this.refs.inputText.value = logOb.command;
+          this.refs.inputText.select();
         }
       }
       return this.update; // returned so you can manually update the log if need be.
     };
 
-    this.on('mount', () => this.inputText.focus());
     this.tba.on('log', lobOb => this.log(lobOb)());
     this.tba.on('output', (output, input) => this.log({command: input, output})());
+    this.on('mount', () => {
+      this.refs.inputText.focus()
+      this.scrollinit.vertical(this.refs.gameLog);
+    });
 
-    this.scrollinit.vertical(this.gameLog);
 
   </script>
 </game-log>

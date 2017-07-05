@@ -61,10 +61,12 @@
 
   </style>
 
-  <script type=babel>
+  <script>
     this.mixin('tba');
     this.mixin('inc');
     this.mixin('storage');
+    this.mixin('controls');
+    this.mixin('incPools');
     this.activeCards = this.storage.get('activeCards') || ['wake-header'];
 
     var onCardActivate = (card) => {
@@ -74,6 +76,31 @@
         this.update();
       }
     };
+
+    this.checkRequirements = name => {
+      if (!name || !this.incPools[name]) return false;
+      var ret = true;
+      var reqs = this.incPools[name].requirements;
+      for (let key in reqs) {
+        if(this.inc.island.getPoolAmount(key) < reqs[key]) {
+          ret = false;
+          break;
+        }
+      }
+      return ret;
+    };
+
+    this.checkGameControlls = () => {
+      var open = false;
+      for (let groupKey in this.controls) {
+        if(open) break;
+        open = this.controls[groupKey].some(e => this.checkRequirements(e.name));
+      }
+      if (open) this.inc.trigger('cardActivate', 'game-controls');
+      else this.inc.one('poolModified', this.checkGameControlls);
+    }
+
+    if (!~this.activeCards.indexOf('game-controls')) this.checkGameControlls();
 
     this.tba.on('cardActivate', onCardActivate);
     this.inc.on('cardActivate', onCardActivate);

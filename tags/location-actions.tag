@@ -1,14 +1,13 @@
 <location-actions>
-  <virtual each={ action, index in actions }>
-    <btn 
-      class="animated fadeIn"
-      style={"animation-delay: " + .05*index + "s"}
-      click={ parent.updateTba.bind(this, action.text) }
-      timer-name={ action.text.replace(/\s/, '').toLowerCase() }
-    >
-      { action.text }
-    </btn>
-  </virtual>
+  <btn 
+    each={ action, index in actions }
+    class="animated fadeIn"
+    style={"animation-delay: " + .05*index + "s"}
+    clickHandle={ parent.updateTba.bind(this, action.text) }
+    timer-name={ action.text.replace(/\s/, '').toLowerCase() }
+  >
+    { action.text }
+  </btn>
 
   <style type=sass>
     @import "sass/vars"
@@ -25,7 +24,7 @@
 
   </style>
 
-  <script type="babel">
+  <script>
     this.mixin('tba');
     this.mixin('storage');
 
@@ -37,8 +36,13 @@
 
     Object.defineProperty(this, 'actions', {
       get(){ 
-        return this.tba.currentRoom && this.tba.currentRoom.actions?
-          this.tba.currentRoom.actions.filter(e => e.locationButton):[];
+        var actions = this.tba.currentRoom && this.tba.currentRoom.actions?
+          this.tba.currentRoom.actions : []
+
+          return actions;
+
+        /*return this.tba.currentRoom && this.tba.currentRoom.actions?*/
+          /*this.tba.currentRoom.actions.filter(e => e.locationButton):[];*/
       }
     });
 
