@@ -73,7 +73,7 @@ tba.addGlobalCommand({command: /^drop\s?(.*)/, method(){
 tba.addGlobalCommand({command: /^make\s(.*)/, method(){
   var query = this.regExpMatchs.command[1];
   var craft = findCraftInName(query);
-  return craft.method();
+  return craft && craft.method? craft.method() : 'cannot make that.';
 }});
 
 tba.addGlobalCommand({command: /^i$|inventory/, method(){

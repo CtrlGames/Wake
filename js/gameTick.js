@@ -14,7 +14,6 @@ function addMoocher() {
       System.import('areas/forest.js')
     ])
     .then( e => {
-      console.log('adding moocher');
       tba.rooms.forest.loadItem(e[0].default);
     });
   }

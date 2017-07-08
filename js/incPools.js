@@ -14,9 +14,14 @@ const pools = {
     details: { group: 'buildings' },
   },
 // workers
-  'Moochers': {
+  'moochers': {
     details: {group: 'workers'},
     increments: {food: -1},
+  },
+  'fisher': {
+    requirements: {moochers: 1, "fishing pole": 1},
+    details: {group: 'workers'},
+    increments: {food: 2},
   }
 };
 

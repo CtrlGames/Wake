@@ -13,6 +13,7 @@ const downBeach = tba.addRoom({
       command: /catch fish/,
       locationButton: true,
       text: 'Catch fish',
+      inc: 'fisher',
       method(){
         if (inc.island.getPoolAmount('fishing pole') > 0) {
           const duration = 3000;

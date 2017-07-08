@@ -4,9 +4,11 @@ import * as storage from 'storage.js';
 import controls  from 'crafts.js';
 import incPools from 'incPools.js';
 import * as gameTick from 'gameTick.js';
+import * as utils from 'utils.js';
 
 riot.mixin('tba', {tba:tba});
 riot.mixin('inc', {inc:inc});
+riot.mixin('utils', {utils:utils});
 riot.mixin('storage', {storage:storage});
 riot.mixin('controls', {controls:controls});
 riot.mixin('incPools', {incPools:incPools});
