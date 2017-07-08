@@ -20,6 +20,10 @@
       overflow: visible
       padding: 0
 
+      &:active
+        transform: translateY(2px)
+        box-shadow: 0px 0px 3px rgba(59, 59, 59, 0.4)
+
       &:hover > tooltip.card
         display: block !important
 
@@ -42,8 +46,6 @@
     this.mixin('tba');
     this.clickHandle = opts.clickhandle;
     this.showTooltip = opts.tooltip && !!opts.tooltip.length;
-
-    console.log(this.showTooltip)
 
     if (this.opts.timerName){
       this.tba.on(`btnTimer-${this.opts.timerName}`, (timeout=3000) => {

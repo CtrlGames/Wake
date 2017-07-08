@@ -30,7 +30,7 @@
     this.mixin('tba');
     this.mixin('controls');
     this.mixin('storage');
-    this.mixin('incPools');
+    this.mixin('utils');
     this.availableControls = {};
 
     var active = false;
@@ -38,26 +38,10 @@
 
     this.clickHandle = (name) => this.tba.input(`make ${name}`);
 
-    this.getTooltip = name => {
-      var ret = '';
-      var reqs = this.incPools[name].requirements;
-      for (let key in reqs) {
-        ret += `${ret.length? '<br>':''}${key}: ${reqs[key]}`;
-      }
-      return ret;
-    };
+    this.getTooltip = this.utils.getRequirementsList;
 
     this.checkRequirements = name => {
-      if (!name || !this.incPools[name]) return false;
-      var ret = true;
-      var reqs = this.incPools[name].requirements;
-      for (let key in reqs) {
-        if(this.inc.island.getPoolAmount(key) < reqs[key]) {
-          ret = false;
-          break;
-        }
-      }
-      return ret;
+      return this.inc.island.checkPoolRequirements(name).success;
     };
 
     var isButtonFound = (name) => {

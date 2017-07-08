@@ -1,13 +1,17 @@
 <location-actions>
-  <btn 
+  <btn-group 
     each={ action, index in actions }
     class="animated fadeIn"
     style={"animation-delay: " + .05*index + "s"}
-    clickHandle={ parent.updateTba.bind(this, action.text) }
-    timer-name={ action.text.replace(/\s/, '').toLowerCase() }
   >
-    { action.text }
-  </btn>
+    <btn 
+      clickHandle={ parent.updateTba.bind(parent, action.text) }
+      timer-name={ action.text.replace(/\s/, '').toLowerCase() }
+    >
+      { parent.action.text }
+    </btn>
+    <btn if={ action.inc && parent.showWorkerButtons } disable={ parent.checkReq(action.inc) } tooltip={parent.getTooltip(action.inc)}>+</btn>
+  </btn-group>
 
   <style type=sass>
     @import "sass/vars"
@@ -18,31 +22,36 @@
       &.card
         padding-top: 0
 
-      btn
+      btn-group
         margin-top: 5px
         margin-right: $gutter/2
 
   </style>
 
   <script>
+    this.mixin('inc');
     this.mixin('tba');
+    this.mixin('utils');
     this.mixin('storage');
 
     var cardActive = !!(this.storage.get('activeCards') && ~this.storage.get('activeCards').indexOf('location-actions'));
 
-    this.updateTba = function(text){
-      this.tba.input(text);
-    };
+    this.updateTba = text => this.tba.input(text);
+
+    this.checkReq = name => this.inc.island.checkPoolRequirements(name).success;
+
+    this.getTooltip = name => this.utils.getRequirementsList(name);
 
     Object.defineProperty(this, 'actions', {
       get(){ 
-        var actions = this.tba.currentRoom && this.tba.currentRoom.actions?
-          this.tba.currentRoom.actions : []
+        return this.tba.currentRoom && this.tba.currentRoom.actions?
+          this.tba.currentRoom.actions.filter(e => e.locationButton):[];
+      }
+    });
 
-          return actions;
-
-        /*return this.tba.currentRoom && this.tba.currentRoom.actions?*/
-          /*this.tba.currentRoom.actions.filter(e => e.locationButton):[];*/
+    Object.defineProperty(this, 'showWorkerButtons', {
+      get(){
+        return this.inc.island.getPoolAmount('moochers') !== null;
       }
     });
 
@@ -52,8 +61,10 @@
       }
     });
 
+    this.tba.on('updateLocationAction', () => this.update());
+
     this.tba.on('roomChange', () => {
-      var btns = this.root.querySelectorAll('btn');
+      var btns = this.root.querySelectorAll('btn-group');
       if (btns.length) {
         btns[0].addEventListener("animationend", () => { 
           this.update();

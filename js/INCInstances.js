@@ -17,6 +17,11 @@ class ModInc extends INC {
     if (!this.pools[pool]) return null;
     return this.pools[pool].amount;
   }
+  checkPoolRequirements (pool, amount=1) {
+    if(!pool) return false;
+    if (this.pools[pool]) return this.pools[pool].checkRequirements(amount)
+    return manualCheckRequirements(pool, amount);
+  }
 }
 
 const queues = Object.create({
@@ -40,6 +45,19 @@ if (incStorage) {
     }
   }
 } else queues.addQueue('island');
+
+function manualCheckRequirements (name, amount) {
+  if (!name || !incPools[name]) return false;
+  var ret = true;
+  var reqs = incPools[name].requirements;
+  for (let key in reqs) {
+    if(queues.island.getPoolAmount(key) < (reqs[key] * amount)) {
+      ret = false;
+      break;
+    }
+  }
+  return {success: ret};
+}
 
 function saveIncValues () {
   var storageOb = {};

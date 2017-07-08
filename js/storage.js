@@ -1,4 +1,11 @@
 window.storage = window.localStorage.getItem('cache');
+window.devPoint = function(){
+  window.localStorage.setItem('devPoint', window.localStorage.cache);
+};
+window.loadDevPoint = function(){
+  window.localStorage.setItem('cache', window.localStorage.devPoint);
+  location.reload();
+};
 if (!storage) storage = {};
 else {
   storage = JSON.parse(atob(storage));

@@ -20,7 +20,7 @@ const moocher = tba.createItem({
   },
   cleanup(){
     inc.off('tick', moocherTick);
-    if (inc.island.getPoolAmount('Moochers') > 0) inc.island.modifyPoolAmount('Moochers', -1);
+    if (inc.island.getPoolAmount('moochers') > 0) inc.island.modifyPoolAmount('moochers', -1);
   },
   hitWithRock: moocherFlee,
   wander () {
@@ -42,8 +42,9 @@ const moocher = tba.createItem({
     {command: /feed/, method(){
       if(inc.island.getPoolAmount('food') <= 0) return 'You have no food.';
       inc.island.modifyPoolAmount('food', -1);
-      if (inc.island.getPoolAmount('Moochers') === null || inc.island.getPoolAmount('Moochers') === 0){
-        inc.island.modifyPoolAmount('Moochers', 1, pools['Moochers']);
+      if (inc.island.getPoolAmount('moochers') === null || inc.island.getPoolAmount('moochers') === 0){
+        inc.island.modifyPoolAmount('moochers', 1, pools['moochers']);
+        tba.trigger('updateLocationAction');
       }
       return 'You feed the creature, It looks ready to work';
     }},

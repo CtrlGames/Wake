@@ -32,7 +32,7 @@ upBeach.addItem({
       this.searchTimer = setTimeout(()=> delete this.searchTimer, duration);
       this.game.trigger('btnTimer-searchshipwreck', duration);
       var find = Math.random();
-      if (find < 0.3) {
+      if (find < 0.6) {
         this.game.trigger('cardActivate', 'increment-pools');
         inc.island.modifyPoolAmount('string', 1);
         return 'You find some string.';
