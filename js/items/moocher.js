@@ -1,7 +1,6 @@
 import tba from 'TBAInstance.js';
 import inc from 'INCInstances.js';
 import pools from 'incPools.js';
-import {debounce} from 'utils.js';
 
 const moocher = tba.createItem({
   key: 'moocher',
@@ -34,7 +33,7 @@ const moocher = tba.createItem({
 
       if (this.game.rooms[exitKey]) {
 
-        if (this.room === this.game.currentRoom) tba.trigger('log', `The creature scurries ${exit.description}`)
+        if (this.room === this.game.currentRoom) tba.trigger('log', `The creature scurries ${exit.description}`);
         else if (exitKey === this.game.currentRoom.key) tba.trigger('log', "the creature enters the area");
 
         this.room.moveItem(this, this.game.rooms[exitKey]);
@@ -90,7 +89,5 @@ function moocherFlee () {
   ];
   return responses[Math.floor(Math.random()*responses.length)];
 }
-
-window.whereMooch = function(){ return moocher.room.key }
 
 export default moocher;

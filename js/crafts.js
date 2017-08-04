@@ -1,5 +1,4 @@
 import inc from 'INCInstances.js';
-import tba from 'TBAInstance.js';
 import pools from 'incPools.js';
 
 function checkReq(name, config) {
@@ -17,7 +16,7 @@ function checkReq(name, config) {
     let ret = 'Not enough resources. You need more: ';
     Object.keys(req.unmetRequirements)
       .forEach((e) => ret += '<div class="indent item">' + e + ': ' + req.unmetRequirements[e] + '</div>');
-    return ret
+    return ret;
   }
 }
 

@@ -13,7 +13,7 @@ export function debounce (cb, i){
     if (count < i) return count++;
     count = 0;
     cb(...args);
-  }
+  };
 }
 
 
@@ -26,5 +26,5 @@ export function getRequirementsList (name) {
     ret += `${ret.length? '<br>':''}${key}: ${reqs[key]}`;
   }
   return ret;
-};
+}
 

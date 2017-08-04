@@ -1,4 +1,4 @@
-window.storage = window.localStorage.getItem('cache');
+var storage = window.storage = window.localStorage.getItem('cache');
 window.devPoint = function(){
   window.localStorage.setItem('devPoint', window.localStorage.cache);
 };

@@ -20,7 +20,7 @@ class ModInc extends INC {
   }
   checkPoolRequirements (pool, amount=1) {
     if(!pool) return false;
-    if (this.pools[pool]) return this.pools[pool].checkRequirements(amount)
+    if (this.pools[pool]) return this.pools[pool].checkRequirements(amount);
     return manualCheckRequirements(pool, amount);
   }
 }
@@ -79,7 +79,7 @@ function saveIncValues () {
 
 document.addEventListener('tick', (e, context) => {
   queues.trigger('poolModified');
-  queues.trigger('tick', context)
+  queues.trigger('tick', context);
   saveIncValues();
 });
 

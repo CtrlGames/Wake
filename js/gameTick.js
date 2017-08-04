@@ -3,7 +3,7 @@ import inc from 'INCInstances.js';
 
 function gameTick(){
   addMoocher();
-};
+}
 
 function addMoocher() {
   // we will want to reduce the respawn chance, or have a timeoutout
