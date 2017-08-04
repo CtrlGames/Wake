@@ -7,10 +7,11 @@ class ModInc extends INC {
     super();
   }
   modifyPoolAmount(pool, amount, details, override=false) {
+    if (!details) details = incPools[pool];
     details = Object.assign({name:pool, key: pool, minimum:0}, details);
     if (!this.pools[pool]) this.addPool(details);
     this.pools[pool].modifyPoolAmount(amount, override);
-    queues.trigger('poolModified');
+    queues.trigger('poolModified', this.pools[pool]);
     saveIncValues();
   }
   getPoolAmount(pool) {
@@ -76,7 +77,11 @@ function saveIncValues () {
   storage.set('incStorage', storageOb);
 }
 
-document.addEventListener('tick', (e, context) => queues.trigger('tick', context));
+document.addEventListener('tick', (e, context) => {
+  queues.trigger('poolModified');
+  queues.trigger('tick', context)
+  saveIncValues();
+});
 
 queues.island.begin(2000);
 
