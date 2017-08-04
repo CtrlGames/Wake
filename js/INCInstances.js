@@ -6,11 +6,11 @@ class ModInc extends INC {
   constructor(){
     super();
   }
-  modifyPoolAmount(pool, amount, details, override=false) {
+  modifyPoolAmount(pool, amount, details, override=false, pay=true) {
     if (!details) details = incPools[pool];
     details = Object.assign({name:pool, key: pool, minimum:0}, details);
     if (!this.pools[pool]) this.addPool(details);
-    this.pools[pool].modifyPoolAmount(amount, override);
+    this.pools[pool].modifyPoolAmount(amount, override, pay);
     queues.trigger('poolModified', this.pools[pool]);
     saveIncValues();
   }
@@ -42,7 +42,7 @@ if (incStorage) {
     queues.addQueue(areaK);
     for (let poolK in area) {
       if (!area.hasOwnProperty(poolK)) continue;
-      queues[areaK].modifyPoolAmount(poolK, area[poolK], incPools[poolK], true);
+      queues[areaK].modifyPoolAmount(poolK, area[poolK], incPools[poolK], true, false);
     }
   }
 } else queues.addQueue('island');
