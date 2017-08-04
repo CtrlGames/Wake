@@ -17,9 +17,12 @@ const moocher = tba.createItem({
   },
   init(){
     inc.on('tick', moocherTick);
+    inc.on('poolModified', moocherTick);
+    if (inc.island.getPoolAmount('moochers') === 0) inc.island.modifyPoolAmount('moochers', 1);
   },
   cleanup(){
     inc.off('tick', moocherTick);
+    inc.off('poolModified', moocherTick);
     if (inc.island.getPoolAmount('moochers') > 0) inc.island.modifyPoolAmount('moochers', -1);
   },
   hitWithRock: moocherFlee,
@@ -55,7 +58,7 @@ const moocher = tba.createItem({
         "Sometimes I like to look up at the sky and dream.",
         "We don't stay long if there isn't a place to sleep."
       ];
-      return responses[Math.floor(Math.random()*responses.length)];
+      return `<i>"${responses[Math.floor(Math.random()*responses.length)]}"</i>`;
     }},
     {command: /yell/, method(){
       var responses = [
@@ -69,13 +72,25 @@ const moocher = tba.createItem({
   ]
 });
 
-var moocherTick = debounce(function () {
-  if(moocher.room) moocher.wander();
-}, 2);
+var moocherTick = function () {
+  if(moocher.room) { 
+    if(inc.island.getPoolAmount('moochers') !== 0){
+      if(Math.random() > 0.2) moocher.wander();
+    }
+    else moocher.room.removeItem(moocher);
+  }
+};
 
 function moocherFlee () {
   moocher.room.removeItem(moocher);
-  return 'The creature flees.';
+  var responses = [
+    "Tears well up in the creature's eyes and it runs away.",
+    "The creature screaches at you and flees. ",
+    "You quickly loose sight of the creature as it flees."
+  ];
+  return responses[Math.floor(Math.random()*responses.length)];
 }
+
+window.whereMooch = function(){ return moocher.room.key }
 
 export default moocher;

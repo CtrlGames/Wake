@@ -22,6 +22,16 @@ const pools = {
     requirements: {moochers: 1, "fishing pole": 1},
     details: {group: 'workers'},
     increments: {food: 2},
+  },
+  'gatherer': {
+    requirements: {moochers: 1},
+    details: {group: 'workers'},
+    increments: {food: -1, wood: 1},
+  },
+  'searcher': {
+    requirements: {moochers: 1},
+    details: {group: 'workers'},
+    increments: {food: -1, string: 1},
   }
 };
 

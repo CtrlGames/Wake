@@ -7,8 +7,10 @@ function gameTick(){
 
 function addMoocher() {
   // we will want to reduce the respawn chance, or have a timeoutout
-  // ideally chance will be calculated based on current population/housing 
-  if (Math.random() < 0.1 && inc.island.getPoolAmount('food') > 0 && !tba.findItem('moocher')) {
+  // ideally chance will be calculated based on current population/housing and food availibility
+  var chance = Math.random() < 0.1;
+  var mooch = tba.findItem('moocher');
+  if (!mooch && inc.island.getPoolAmount('food') > 0 && chance) {
     Promise.all([
       System.import('items/moocher.js'),
       System.import('areas/forest.js')

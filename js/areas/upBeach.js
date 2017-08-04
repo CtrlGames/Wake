@@ -12,6 +12,7 @@ const upBeach = tba.addRoom({
   },
   actions: [
     {
+      inc: 'searcher',
       locationButton: true,
       text: 'Search shipwreck',
     },

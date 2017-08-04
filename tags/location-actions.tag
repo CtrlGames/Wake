@@ -10,7 +10,7 @@
     >
       { parent.action.text }
     </btn>
-    <btn if={ action.inc && parent.showWorkerButtons } disable={ parent.checkReq(action.inc) } tooltip={parent.getTooltip(action.inc)}>+</btn>
+    <btn clickHandle={ parent.handleInc.bind(parent, action.inc) } if={ action.inc && parent.showWorkerButtons } disable={ parent.checkReq(action.inc) } tooltip={parent.getTooltip(action.inc)}>+</btn>
   </btn-group>
 
   <style type=sass>
@@ -41,6 +41,10 @@
     this.checkReq = name => this.inc.island.checkPoolRequirements(name).success;
 
     this.getTooltip = name => this.utils.getRequirementsList(name);
+
+    this.handleInc = pool => {
+      this.inc.island.modifyPoolAmount(pool, 1)
+    }
 
     Object.defineProperty(this, 'actions', {
       get(){ 
