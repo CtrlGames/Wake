@@ -98,7 +98,7 @@
       }
       if (open) this.inc.trigger('cardActivate', 'game-controls');
       else this.inc.one('poolModified', this.checkGameControlls);
-    }
+    };
 
     if (!~this.activeCards.indexOf('game-controls')) this.checkGameControlls();
 

@@ -42,9 +42,7 @@
 
     this.getTooltip = name => this.utils.getRequirementsList(name);
 
-    this.handleInc = pool => {
-      this.inc.island.modifyPoolAmount(pool, 1)
-    }
+    this.handleInc = pool => this.inc.island.modifyPoolAmount(pool, 1);
 
     Object.defineProperty(this, 'actions', {
       get(){ 

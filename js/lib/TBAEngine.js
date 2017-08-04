@@ -134,7 +134,7 @@ Room.prototype = {
   },
 
   removeItem(item) {
-    if(typeof item === 'string') item = this.items[item]
+    if(typeof item === 'string') item = this.items[item];
     if (item.cleanup) item.cleanup();
     delete item.room;
     delete this.items[item.key];

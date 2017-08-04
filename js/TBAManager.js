@@ -92,7 +92,7 @@ function findCraftInName (name){
   for (let key in crafts) {
     if (!crafts.hasOwnProperty) continue;
     for (let i = 0; i < crafts[key].length; i++){
-      if (!!~name.indexOf(crafts[key][i].name)) return crafts[key][i]
+      if (~name.indexOf(crafts[key][i].name)) return crafts[key][i];
     }
   }
 }
