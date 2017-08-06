@@ -55,14 +55,16 @@ const moocher = tba.createItem({
         "You're very tall.",
         "That is a nice looking rock you've got.",
         "Sometimes I like to look up at the sky and dream.",
-        "We don't stay long if there isn't a place to sleep."
+        "We won't stay long if there isn't a place to sleep.",
+        "We fear the beast.",
+        "The beast will eat us."
       ];
       return `<i>"${responses[Math.floor(Math.random()*responses.length)]}"</i>`;
     }},
-    {command: /yell/, method(){
+    {command: /yell|shout/, method(){
       var responses = [
         "Tears well up in the creature's eyes.",
-        "The creature scowls back angrily at you.",
+        "The creature scowls angrily at you.",
         "The creature ignores you"
       ];
       return responses[Math.floor(Math.random()*responses.length)];

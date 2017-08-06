@@ -14,6 +14,10 @@ class ModInc extends INC {
     queues.trigger('poolModified', this.pools[pool]);
     saveIncValues();
   }
+  refundPoolAmount(pool, amount, override){
+    this.pools[pool].refundPoolAmount(amount, override);
+    queues.trigger('poolModified', this.pools[pool]);
+  }
   getPoolAmount(pool) {
     if (!this.pools[pool]) return null;
     return this.pools[pool].amount;

@@ -68,6 +68,16 @@ var poolPrototype = {
     }
   },
 
+  refundPoolAmount: function(n, override) {
+    var pass = this.checkMinandMax(-n).success;
+    if (pass) {
+      this.modifyPoolAmount(-n, override);
+      for(let key in this.requirements){
+        this.queue.pools[key].modifyPoolAmount(this.requirements[key], override, false);
+      }
+    }
+  },
+
   checkRequirements: function(n, pay){
     var unmetReq = {};
     Object.keys(this.requirements).forEach(e => {

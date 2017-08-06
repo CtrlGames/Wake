@@ -64,6 +64,8 @@
     });
 
     this.tba.on('updateLocationAction', () => this.update());
+    this.inc.on('poolModified', () => this.update() );
+    this.inc.on('tick', () => this.update() );
 
     this.tba.on('roomChange', () => {
       var btns = this.root.querySelectorAll('btn-group');
