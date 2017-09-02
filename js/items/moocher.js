@@ -15,7 +15,6 @@ const moocher = tba.createItem({
     return details[Math.floor(Math.random()*details.length)];
   },
   init(){
-
     inc.on('poolModified', moocherTick);
     if (inc.island.getPoolAmount('moochers') === 0) inc.island.modifyPoolAmount('moochers', 1);
   },
