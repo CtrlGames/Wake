@@ -8,6 +8,7 @@ const downBeach = tba.addRoom({
   name: 'Down Beach',
   accessor: /down.*beach|down/,
   exitDescription: 'down the beach',
+  description: 'The water is calm in a large tide pool.',
   actions: [
     {
       command: /catch fish/,
@@ -41,7 +42,6 @@ downBeach.addItem({
   state: {
     hasRock: false,
   },
-  description: 'The water is calm in a large tide pool.',
   detail(){
     if (this.state.hasRock) return 'The rock probably scared the fish away.';
     else return 'There are probably fish in there.';
