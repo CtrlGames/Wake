@@ -5,6 +5,8 @@ import controls  from 'crafts.js';
 import incPools from 'incPools.js';
 import * as gameTick from 'gameTick.js';
 
+import blah from 'items/fisher.js';
+
 riot.mixin('tba', {tba:tba});
 riot.mixin('inc', {inc:inc});
 riot.mixin('storage', {storage:storage});

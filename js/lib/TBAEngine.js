@@ -180,6 +180,7 @@ function Item(descriptor, room, game) {
   this.name = this.name || this.key;
   this.room = room || null;
 
+
   for (var i = 0, l = validGetters.length; i < l; i++) {
     var e = validGetters[i];
     if (typeof this[e] === 'function') Object.defineProperty(this, e, {get:this[e].bind(this)});

@@ -16,11 +16,12 @@ const moocher = tba.createItem({
     return details[Math.floor(Math.random()*details.length)];
   },
   init(){
-    inc.on('tick', moocherTick);
+    inc.on('poolModified', moocherTick);
+    if (inc.island.getPoolAmount('moochers') === 0) inc.island.modifyPoolAmount('moochers', 1);
   },
   cleanup(){
-    inc.off('tick', moocherTick);
-    if (inc.island.getPoolAmount('Moochers') > 0) inc.island.modifyPoolAmount('Moochers', -1);
+    inc.off('poolModified', moocherTick);
+    if (inc.island.getPoolAmount('moochers') > 0) inc.island.modifyPoolAmount('moochers', -1);
   },
   hitWithRock: moocherFlee,
   wander () {
@@ -31,8 +32,8 @@ const moocher = tba.createItem({
 
       if (this.game.rooms[exitKey]) {
 
-        if (this.room === this.game.currentRoom) tba.trigger('log', `The creature scurries ${exit.description}`)
-        else if (exitKey === this.game.currentRoom.key) tba.trigger('log', "the creature enters the area");
+        if (this.room === this.game.currentRoom) tba.trigger('log', `The creature scurries ${exit.description}`);
+        else if (exitKey === this.game.currentRoom.key) tba.trigger('log', "A creature enters the area");
 
         this.room.moveItem(this, this.game.rooms[exitKey]);
       }
@@ -68,13 +69,23 @@ const moocher = tba.createItem({
   ]
 });
 
-var moocherTick = debounce(function () {
-  if(moocher.room) moocher.wander();
-}, 2);
+var moocherTick = function () {
+  if(moocher.room) { 
+    console.log('checking moochers');
+    if(inc.island.getPoolAmount('moochers') !== 0){
+      if(Math.random() > 0.2) moocher.wander();
+    }
+    else moocher.room.removeItem(moocher);
+  }
+};
 
 function moocherFlee () {
   moocher.room.removeItem(moocher);
   return 'The creature flees.';
+}
+
+window.whereMooch = function(){
+  return moocher.room.key;
 }
 
 export default moocher;
