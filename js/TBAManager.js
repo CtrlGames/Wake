@@ -36,7 +36,7 @@ tba.addGlobalCommand({command: /^(go|g)\s(.*)/, method(){
         var room = this.currentRoom.exits[key].room;
         this.enterRoom(room).then(e => {
           var command = this.regExpMatchs.command[0];
-          if (~visitedRooms.indexOf(room.key)) return tba.trigger('log', {output: this.currentRoom.name, command});
+          if (~visitedRooms.indexOf(room.key)) return tba.trigger('log', {output: getRoomAbbreviation(this.currentRoom), command});
           visitedRooms.push(this.currentRoom.key);
           tba.trigger('log', {output: e, command});
         });
@@ -95,6 +95,15 @@ function findCraftInName (name){
       if (~name.indexOf(crafts[key][i].name)) return crafts[key][i];
     }
   }
+}
+
+function getRoomAbbreviation (room){ var ret = room.name;
+  var items = Object.keys(room.items);
+  for(let i=0; i<items.length; i++){
+    let it = room.items[items[i]]
+    if(it.description) ret += "<br>"+it.description;
+  }
+  return ret;
 }
 
 export default tba;
