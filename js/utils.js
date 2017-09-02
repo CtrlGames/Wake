@@ -1,3 +1,5 @@
+import incPools from 'incPools.js';
+
 // DEBOUNCE
 // accepts a callback and an int
 //
@@ -11,5 +13,18 @@ export function debounce (cb, i){
     if (count < i) return count++;
     count = 0;
     cb(...args);
-  }
+  };
 }
+
+
+/// TAG Utils
+
+export function getRequirementsList (name) {
+  var ret = '';
+  var reqs = incPools[name].requirements;
+  for (let key in reqs) {
+    ret += `${ret.length? '<br>':''}${key}: ${reqs[key]}`;
+  }
+  return ret;
+}
+

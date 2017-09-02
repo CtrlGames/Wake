@@ -6,16 +6,26 @@ class ModInc extends INC {
   constructor(){
     super();
   }
-  modifyPoolAmount(pool, amount, details, override=false) {
+  modifyPoolAmount(pool, amount, details, override=false, pay=true) {
+    if (!details) details = incPools[pool];
     details = Object.assign({name:pool, key: pool, minimum:0}, details);
     if (!this.pools[pool]) this.addPool(details);
-    this.pools[pool].modifyPoolAmount(amount, override);
-    queues.trigger('poolModified');
+    this.pools[pool].modifyPoolAmount(amount, override, pay);
+    queues.trigger('poolModified', this.pools[pool]);
     saveIncValues();
+  }
+  refundPoolAmount(pool, amount, override){
+    this.pools[pool].refundPoolAmount(amount, override);
+    queues.trigger('poolModified', this.pools[pool]);
   }
   getPoolAmount(pool) {
     if (!this.pools[pool]) return null;
     return this.pools[pool].amount;
+  }
+  checkPoolRequirements (pool, amount=1) {
+    if(!pool) return false;
+    if (this.pools[pool]) return this.pools[pool].checkRequirements(amount);
+    return manualCheckRequirements(pool, amount);
   }
 }
 
@@ -36,10 +46,23 @@ if (incStorage) {
     queues.addQueue(areaK);
     for (let poolK in area) {
       if (!area.hasOwnProperty(poolK)) continue;
-      queues[areaK].modifyPoolAmount(poolK, area[poolK], incPools[poolK], true);
+      queues[areaK].modifyPoolAmount(poolK, area[poolK], incPools[poolK], true, false);
     }
   }
 } else queues.addQueue('island');
+
+function manualCheckRequirements (name, amount) {
+  if (!name || !incPools[name]) return false;
+  var ret = true;
+  var reqs = incPools[name].requirements;
+  for (let key in reqs) {
+    if(queues.island.getPoolAmount(key) < (reqs[key] * amount)) {
+      ret = false;
+      break;
+    }
+  }
+  return {success: ret};
+}
 
 function saveIncValues () {
   var storageOb = {};
@@ -58,7 +81,11 @@ function saveIncValues () {
   storage.set('incStorage', storageOb);
 }
 
-document.addEventListener('tick', (e, context) => queues.trigger('tick', context));
+document.addEventListener('tick', (e, context) => {
+  queues.trigger('poolModified');
+  queues.trigger('tick', context);
+  saveIncValues();
+});
 
 queues.island.begin(2000);
 

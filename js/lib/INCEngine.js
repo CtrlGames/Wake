@@ -50,11 +50,11 @@ var poolPrototype = {
     }
   },
 
-  modifyPoolAmount: function(n, override) { 
+  modifyPoolAmount: function(n, override, pay) { 
     var pass = this.checkMinandMax(n);
     n = pass.success ? n : pass.toCapacity;
     if (n > 0) {
-      var requirements = this.checkRequirements(n, true);
+      var requirements = this.checkRequirements(n, pay);
 
       if (requirements.success || override) {
         this.amount += n;
@@ -65,6 +65,16 @@ var poolPrototype = {
     } else {
       this.amount += n;
       return pass;
+    }
+  },
+
+  refundPoolAmount: function(n, override) {
+    var pass = this.checkMinandMax(-n).success;
+    if (pass) {
+      this.modifyPoolAmount(-n, override);
+      for(let key in this.requirements){
+        this.queue.pools[key].modifyPoolAmount(this.requirements[key], override, false);
+      }
     }
   },
 

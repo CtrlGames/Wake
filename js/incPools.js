@@ -6,12 +6,18 @@ const pools = {
 // tools
   'fishing pole': {
     requirements: { wood: 1, string: 1 },
-    details: { group: 'tools' },
+    details: { 
+      group: 'tools',
+      purchasable: true
+    }
   },
 // buildings
   'hut': {
     requirements: { wood: 2 },
-    details: { group: 'buildings' },
+    details: {
+      group: 'buildings',
+      purchasable: true
+    },
   },
 // workers
   'moochers': {
@@ -33,6 +39,7 @@ const pools = {
     increments: {food: -1, wood: 1},
     details: {
       group: 'workers',
+
       defaultArea: 'inland',
       purchasable: true,
       refundable: true

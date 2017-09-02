@@ -1,7 +1,6 @@
 import tba from 'TBAInstance.js';
 import inc from 'INCInstances.js';
 import pools from 'incPools.js';
-import {debounce} from 'utils.js';
 
 const moocher = tba.createItem({
   key: 'moocher',
@@ -16,6 +15,7 @@ const moocher = tba.createItem({
     return details[Math.floor(Math.random()*details.length)];
   },
   init(){
+
     inc.on('poolModified', moocherTick);
     if (inc.island.getPoolAmount('moochers') === 0) inc.island.modifyPoolAmount('moochers', 1);
   },
@@ -43,8 +43,9 @@ const moocher = tba.createItem({
     {command: /feed/, method(){
       if(inc.island.getPoolAmount('food') <= 0) return 'You have no food.';
       inc.island.modifyPoolAmount('food', -1);
-      if (inc.island.getPoolAmount('Moochers') === null || inc.island.getPoolAmount('Moochers') === 0){
-        inc.island.modifyPoolAmount('Moochers', 1, pools['Moochers']);
+      if (inc.island.getPoolAmount('moochers') === null || inc.island.getPoolAmount('moochers') === 0){
+        inc.island.modifyPoolAmount('moochers', 1, pools['moochers']);
+        tba.trigger('updateLocationAction');
       }
       return 'You feed the creature, It looks ready to work';
     }},
@@ -53,14 +54,16 @@ const moocher = tba.createItem({
         "You're very tall.",
         "That is a nice looking rock you've got.",
         "Sometimes I like to look up at the sky and dream.",
-        "We don't stay long if there isn't a place to sleep."
+        "We won't stay long if there isn't a place to sleep.",
+        "We fear the beast.",
+        "The beast will eat us."
       ];
-      return responses[Math.floor(Math.random()*responses.length)];
+      return `<i>"${responses[Math.floor(Math.random()*responses.length)]}"</i>`;
     }},
-    {command: /yell/, method(){
+    {command: /yell|shout/, method(){
       var responses = [
         "Tears well up in the creature's eyes.",
-        "The creature scowls back angrily at you.",
+        "The creature scowls angrily at you.",
         "The creature ignores you"
       ];
       return responses[Math.floor(Math.random()*responses.length)];
@@ -71,7 +74,6 @@ const moocher = tba.createItem({
 
 var moocherTick = function () {
   if(moocher.room) { 
-    console.log('checking moochers');
     if(inc.island.getPoolAmount('moochers') !== 0){
       if(Math.random() > 0.2) moocher.wander();
     }
@@ -81,7 +83,12 @@ var moocherTick = function () {
 
 function moocherFlee () {
   moocher.room.removeItem(moocher);
-  return 'The creature flees.';
+  var responses = [
+    "Tears well up in the creature's eyes and it runs away.",
+    "The creature screaches at you and flees. ",
+    "You quickly loose sight of the creature as it flees."
+  ];
+  return responses[Math.floor(Math.random()*responses.length)];
 }
 
 window.whereMooch = function(){

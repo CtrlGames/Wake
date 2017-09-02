@@ -124,6 +124,7 @@ function saveItem(item, location){
 function saveRemoveItem (item) {
   tbaStorage.items.splice(tbaStorage.items.findIndex(e => e.key === item.key), 1);
   storage.set('tbaStorage', tbaStorage);
+  itemLocationMap = tbaStorage.items;
 }
 
 function loadState(ob){

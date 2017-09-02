@@ -22,6 +22,7 @@ const inland = tba.addRoom({
       command: /clear (area|brush)/,
       locationButton: true,
       text: 'Clear area',
+      inc: 'gatherer',
       method(){
         const duration = 5000;
         if (this.clearTimeout) return 'You fail.';

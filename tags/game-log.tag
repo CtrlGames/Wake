@@ -105,12 +105,12 @@
     this.selectText = function(text) {
       this.refs.inputText.value = text;
       this.refs.inputText.select();
-    }
+    };
 
     this.inputkeydown = function(e){
       e.stopPropagation();
       return true;
-    }
+    };
 
     this.logInput = function(){
       this.tba.input(this.refs.inputText.value);
@@ -134,7 +134,7 @@
     this.tba.on('log', lobOb => this.log(lobOb)());
     this.tba.on('output', (output, input) => this.log({command: input, output})());
     this.on('mount', () => {
-      this.refs.inputText.focus()
+      this.refs.inputText.focus();
       this.scrollinit.vertical(this.refs.gameLog);
     });
 
