@@ -5,6 +5,10 @@ function gameTick(){
   addMoocher();
 }
 
+function poolModified(pool){
+  if(pool && pool.details.group === 'workers' && pool.key !== 'moochers') manageWorkerInstances(pool);
+} 
+
 function addMoocher() {
   // we will want to reduce the respawn chance, or have a timeoutout
   // ideally chance will be calculated based on current population/housing and food availibility
@@ -21,10 +25,21 @@ function addMoocher() {
   }
 }
 
+function manageWorkerInstances (pool) {
+  if(pool.amount > 0 && !tba.findItem(pool.key)){
+    System.import(`items/${pool.key}.js`).then(e => tba.createItem(e.default, pool.details.defaultArea))
+  }
+  else if(pool.amount === 0 && tba.findItem(pool.key)){
+    tba.removeItem(pool);
+  }
+}
+
 export function start () {
   inc.on('tick', gameTick);
+  inc.on('poolModified', poolModified);
 }
 
 export function stop () {
   inc.off('tick', gameTick);
+  inc.off('poolModified', poolModified);
 }

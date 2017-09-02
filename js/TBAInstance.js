@@ -20,9 +20,18 @@ class modTba extends TBA {
     if(descriptor.state) loadState(this.rooms[descriptor.key]);
     return this.rooms[descriptor.key];
   }
-  createItem(descriptor){
+  createItem(descriptor, location){
     if(descriptor.state) loadState(descriptor);
+    if(location) {
+      if(this.rooms[location]) return this.rooms[location].loadItem(descriptor);
+      else saveItem(descriptor, location);
+    }
     return new modItem(descriptor, null, this);
+  }
+  removeItem(item){
+    item = this.findItem(item.key);
+    if (this.rooms[item.location]) this.rooms[item.location].removeItem(item);
+    else saveRemoveItem(item);
   }
   log(output, className){
     tba.trigger('log', {output, className});

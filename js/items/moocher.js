@@ -15,12 +15,11 @@ const moocher = tba.createItem({
     return details[Math.floor(Math.random()*details.length)];
   },
   init(){
-    inc.on('tick', moocherTick);
+
     inc.on('poolModified', moocherTick);
     if (inc.island.getPoolAmount('moochers') === 0) inc.island.modifyPoolAmount('moochers', 1);
   },
   cleanup(){
-    inc.off('tick', moocherTick);
     inc.off('poolModified', moocherTick);
     if (inc.island.getPoolAmount('moochers') > 0) inc.island.modifyPoolAmount('moochers', -1);
   },
@@ -34,7 +33,7 @@ const moocher = tba.createItem({
       if (this.game.rooms[exitKey]) {
 
         if (this.room === this.game.currentRoom) tba.trigger('log', `The creature scurries ${exit.description}`);
-        else if (exitKey === this.game.currentRoom.key) tba.trigger('log', "the creature enters the area");
+        else if (exitKey === this.game.currentRoom.key) tba.trigger('log', "A creature enters the area");
 
         this.room.moveItem(this, this.game.rooms[exitKey]);
       }
@@ -90,6 +89,10 @@ function moocherFlee () {
     "You quickly loose sight of the creature as it flees."
   ];
   return responses[Math.floor(Math.random()*responses.length)];
+}
+
+window.whereMooch = function(){
+  return moocher.room.key;
 }
 
 export default moocher;

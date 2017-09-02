@@ -29,6 +29,7 @@ const pools = {
     increments: { food: 2 },
     details: { 
       group: 'workers',
+      defaultArea: 'downBeach',
       purchasable: true,
       refundable: true
     }
@@ -38,6 +39,8 @@ const pools = {
     increments: {food: -1, wood: 1},
     details: {
       group: 'workers',
+
+      defaultArea: 'inland',
       purchasable: true,
       refundable: true
     },
@@ -47,6 +50,7 @@ const pools = {
     increments: {food: -1, string: 1},
     details: { 
       group: 'workers',
+      defaultArea: 'upBeach',
       purchasable: true,
       refundable: true
     }
