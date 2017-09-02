@@ -6,6 +6,8 @@ import incPools from 'incPools.js';
 import * as gameTick from 'gameTick.js';
 import * as utils from 'utils.js';
 
+import blah from 'items/fisher.js';
+
 riot.mixin('tba', {tba:tba});
 riot.mixin('inc', {inc:inc});
 riot.mixin('utils', {utils:utils});
