@@ -43,8 +43,6 @@
     this.clickHandle = opts.clickhandle;
     this.showTooltip = opts.tooltip && !!opts.tooltip.length;
 
-    console.log(this.showTooltip)
-
     if (this.opts.timerName){
       this.tba.on(`btnTimer-${this.opts.timerName}`, (timeout=3000) => {
         this.refs.pb.style.animationDuration = `${timeout}ms`;
