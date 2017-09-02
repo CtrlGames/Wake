@@ -32,6 +32,31 @@ class ModInc extends INC {
     if (this.pools[pool]) return this.pools[pool].checkRequirements(amount);
     return manualCheckRequirements(pool, amount);
   }
+  getGroup(group){
+    return new PoolGroup(group, this.pools);
+  }
+}
+
+class PoolGroup {
+  constructor (group, pools){
+    this.pools = {};
+    for(let p in pools){
+      if(!pools.hasOwnProperty(p)) continue;
+      let pool = pools[p];
+      if(pool.details.group === group) this.pools[pool.name] = pool;
+    }
+  }
+  getTotal () {
+    var total = 0;
+    for(let p in this.pools){
+      if(!this.pools.hasOwnProperty(p)) continue;
+      total += this.pools[p].amount;
+    }
+    return total;
+  }
+  list () {
+    return Object.keys(this.pools);
+  }
 }
 
 const queues = Object.create({

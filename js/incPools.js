@@ -26,7 +26,7 @@ const pools = {
   },
   'fisher': {
     requirements: { moochers: 1, "fishing pole": 1 },
-    increments: { food: 2 },
+    increments: { food: 1 },
     details: { 
       group: 'workers',
       defaultArea: 'downBeach',

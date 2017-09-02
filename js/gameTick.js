@@ -3,6 +3,7 @@ import inc from 'INCInstances.js';
 
 function gameTick(){
   addMoocher();
+  managePopulation();
 }
 
 function poolModified(pool){
@@ -22,6 +23,24 @@ function addMoocher() {
     .then( e => {
       tba.rooms.forest.loadItem(e[0].default);
     });
+  }
+}
+
+function managePopulation(){
+  var workers = inc.island.getGroup('workers');
+  var popCap = inc.island.pools.hut? inc.island.pools.hut.amount*2:0;
+  var curPop = workers.getTotal();
+  var chance = Math.random() < 0.1; // we don't want them to leave every tick just randomly
+  if (curPop > popCap && chance) tba.log('Some of your workers have left because they have no place to stay.');
+  while (curPop > popCap && chance) {
+    if (workers.pools.moochers.amount) inc.island.modifyPoolAmount('moochers', -1);
+    else {
+      let i = 0;
+      let list = workers.list();
+      while (!workers.pools[list[i]].amount) i++
+      inc.island.modifyPoolAmount(workers.pools[list[i]].key, -1);
+    }
+    curPop = workers.getTotal();
   }
 }
 
