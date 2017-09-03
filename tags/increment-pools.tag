@@ -53,7 +53,6 @@
       return ret.sort((a,b) => a.position-b.position);
     };
 
-    this.inc.on('poolModified', () => this.update() );
-    this.inc.on('tick', () => this.update() );
+    this.inc.on('poolAdded', () => this.update() );
   </script>
 </increment-pools>

@@ -1,10 +1,15 @@
 import INC from 'lib/INCEngine.js';
 import * as storage from 'storage.js';
 import incPools from 'incPools.js';
+import { addTrigger } from 'utils.js';
 
 class ModInc extends INC {
   constructor(){
     super();
+  }
+  addPool(details){
+    super.addPool(details);
+    queues.trigger('poolAdded', details);
   }
   modifyPoolAmount(pool, amount, details, override=false, pay=true) {
     if (!details) details = incPools[pool];
@@ -14,7 +19,7 @@ class ModInc extends INC {
     queues.trigger('poolModified', this.pools[pool]);
     saveIncValues();
   }
-  refundPoolAmount(pool, amount, override){
+  refundPoolAmount(pool, amount, override=true){
     this.pools[pool].refundPoolAmount(amount, override);
     queues.trigger('poolModified', this.pools[pool]);
   }
