@@ -28,6 +28,8 @@
 
   <script>
     this.mixin('inc');
+    
+    this.inc.on('poolModified', () => this.update() );
 
     this.purchase = function(){
       this.inc.island.modifyPoolAmount(this.pool.key, 1);
