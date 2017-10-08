@@ -3,13 +3,11 @@ wake
 
 #### Dependencies
  - Node >= v6 & NPM >= v3
- - a small file server ( Reccomend: [http-server](https://www.npmjs.com/package/http-server))
  
 #### Environment setup
  - clone repository ( suprise, suprise )
  - run `npm install`
- - run build ( see build commands )
- - start file server in project root and load it up in your browser.
+ - run `npm start` ( see build commands )
  
 #### build commands
  Wake uses NPM as its build manager and utilizes the scripts section of the package.json to define its build commands.
@@ -25,3 +23,4 @@ wake
  - `build` compile everything
  - `build:watch` compile everything and watch for all changes
  - `lint` lint files
+ - `start` start an http-server and the build:watch command
